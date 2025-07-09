@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keddily - Multi-Tenancy eCommerce Platform (SAAS)</title>
+    <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large"/>
+    <link rel="canonical" href="https://doc.keddily.com" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Keddily - Multi-Tenancy eCommerce Platform (SAAS)" />
+    <meta property="og:url" content="https://doc.keddily.com" />
+    <meta property="og:site_name" content="Keddily" />
+    <meta property="og:updated_time" content="2025-06-18 T04:14:18+00:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Keddily - Multi-Tenancy eCommerce Platform (SAAS)" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #c61524;
+            --primary-hover-color: #2980b9;
+            --text-color-primary: #03199c;
+            --text-color-secondary: #0d0927;
+            --bg-color: #f4f7f9;
+            --surface-color: #ffffff;
+            --border-color: #474d57;
+            --accent-bg-color: #ebebeb;
+            --note-bg-color: #fdf8e2;
+            --note-border-color: #f1c40f;
+            --note-text-color: #856404;
+            --shadow-color: #0d092759;
+            --header-logo-filter: invert(0);
+            --font-family-en: 'Poppins', sans-serif;
+            --font-family-ar: 'Tajawal', sans-serif;
+        }
+
+        body.dark-mode {
+            --primary-color: #74bff1;
+            --primary-hover-color: #5dade2;
+            --text-color-primary: #ecf0f1;
+            --text-color-secondary: #bdc3c7;
+            --bg-color: #212b36;
+            --surface-color: #000000;
+            --border-color: #485a70;
+            --accent-bg-color: #212325;
+            --note-bg-color: #4a4a28;
+            --note-border-color: #f1c40f;
+            --note-text-color: #fff2b0;
+            --shadow-color: 2980b994;
+            --header-logo-filter: invert(0);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-family-en);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        [lang="ar"] { font-family: var(--font-family-ar); }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease;
+            /* overflow: hidden; */ /* REMOVED: This was masking the root problem */
+        }
+        
+        .lang-ar { display: none; }
+        body.lang-ar-active .lang-en { display: none; }
+        body.lang-ar-active .lang-ar { display: inline; }
+
+
+        header {
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            background-color: var(--surface-color);
+            z-index: 100;
+        }
+        
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .menu-toggle-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        
+        header .logo-container img {
+            height: 100px;
+            width: auto;
+            transition: filter 0.3s;
+        }
+        body.dark-mode .logo-container img { filter: var(--header-logo-filter); }
+
+        .search-container {
+            position: relative;
+        }
+        #search-input {
+            width: 300px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color-primary);
+            font-family: inherit;
+            font-size: 1em;
+        }
+        #search-results {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            right: 0;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 110;
+        }
+        #search-results a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-color-primary);
+            text-decoration: none;
+        }
+        #search-results a:hover {
+            background-color: var(--accent-bg-color);
+            color: var(--primary-color);
+        }
+        #search-results a small {
+            display: block;
+            color: var(--text-color-secondary);
+            font-size: 0.8em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lang-switch button, .theme-switch-wrapper {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .lang-switch button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .theme-switch-wrapper { padding: 4px; }
+        .theme-switch { display: inline-block; height: 26px; position: relative; width: 50px; }
+        .theme-switch input { display:none; }
+        .slider { background-color: #ccc; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 26px; }
+        .slider:before { background-color: #fff; bottom: 3px; content: ""; height: 20px; left: 3px; position: absolute; transition: .4s; width: 20px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .slider:after{ content:'☀️'; color: #f1c40f; display: block; position: absolute; transform: translate(-50%,-50%); top: 50%; left: 75%; font-size: 12px; }
+        input:checked + .slider:after{ content:'🌙'; left: 25%; }
+
+        .content-wrapper {
+            display: flex;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: var(--accent-bg-color);
+            padding: 25px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 200;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+        }
+        body.sidebar-open .sidebar {
+            transform: translateX(0);
+        }
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 199;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        body.sidebar-open .sidebar-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 5px;
+            padding-bottom: 25px;
+        }
+        .sidebar-header h2 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.4em;
+        }
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--text-color-secondary);
+            line-height: 1;
+        }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: var(--text-color-primary);
+            font-weight: 500;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 6px;
+        }
+        .sidebar ul li a:hover { color: var(--primary-color); background-color: var(--surface-color); }
+        .sidebar ul ul { padding-left: 15px; }
+        .sidebar ul ul li a { font-weight: 400; color: var(--text-color-secondary); }
+
+        main {
+            flex-grow: 1;
+            padding: 40px 50px;
+            transition: margin-left 0.3s ease, margin-right 0.3s ease;
+            min-width: 0; /* KEY FIX: Prevents flex item from overflowing its container */
+        }
+        
+        section h2, section h3, section h4 { margin-top: 40px; margin-bottom: 20px; font-weight: 600; }
+        section h2 { color: var(--primary-color); font-size: 2.2em; padding-bottom: 15px; border-bottom: 2px solid var(--primary-color); }
+        section h3 { font-size: 1.6em; padding: 8px 12px; background-color: var(--accent-bg-color); border-radius: 8px; border-left: 4px solid var(--primary-color); }
+        section h4 { font-size: 1.2em; }
+        
+        ul { list-style: disc; margin-left: 25px; padding: 0; }
+        ul li { margin-bottom: 10px; color: var(--text-color-secondary); }
+        ul li::marker { color: var(--primary-color); }
+        a { color: var(--primary-color); text-decoration: none; }
+        a:hover { color: var(--primary-hover-color); text-decoration: underline; }
+        
+        /* KEY FIX: Force word wrapping for long strings in code/pre blocks */
+        pre, code {
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            word-break: break-all !important;
+        }
+
+        .note {
+            background-color: var(--note-bg-color);
+            border-left: 5px solid var(--note-border-color);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            color: var(--note-text-color);
+        }
+
+        .content-image { max-width: 100%; height: auto; display: block; margin: 25px auto; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 4px 16px var(--shadow-color); }
+        .image-caption { text-align: center; font-style: italic; color: var(--text-color-secondary); margin-top: -10px; margin-bottom: 25px; font-size: 0.9em; }
+
+        footer { text-align: center; padding: 30px; margin-top: 40px; color: var(--text-color-secondary); border-top: 1px solid var(--border-color); }
+        
+        [dir="rtl"] { font-family: var(--font-family-ar); }
+        [dir="rtl"] .sidebar { left: auto; right: 0; transform: translateX(100%); border-right: none; border-left: 1px solid var(--border-color); }
+        [dir="rtl"].sidebar-open .sidebar { transform: translateX(0); }
+        [dir="rtl"] #search-results { left: auto; right: 0; }
+        [dir="rtl"] section h3 { border-left: none; border-right: 4px solid var(--primary-color); }
+        [dir="rtl"] ul { margin-left: 0; margin-right: 25px; }
+        [dir="rtl"] .sidebar ul ul { padding-left: 0; padding-right: 15px; }
+        [dir="rtl"] .note { border-left: none; border-right: 5px solid var(--note-border-color); }
+
+
+        @media (max-width: 992px) {
+            header { flex-wrap: wrap; padding: 15px 20px; }
+            .search-container { order: 3; width: 100%; margin-top: 10px; }
+            #search-input { width: 100%; }
+            .sidebar { box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+            main { padding: 20px; }
+            
+            /* On mobile, sidebar is an overlay, so main content doesn't need margin */
+            body.sidebar-open main {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        @media (max-width: 576px) {
+            .container { margin: 0; border-radius: 0; box-shadow: none;}
+            .header-left .logo-container { display: none; }
+            section h2 { font-size: 1.8em; }
+            section h3 { font-size: 1.4em; }
+        }
+    </style>
+</head>
+<body class="sidebar-open">
+
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar" id="table-of-contents">
+        <div class="sidebar-header">
+            <h2><span class="lang-en">Menu</span><span class="lang-ar">القائمة</span></h2>
+            <button class="close-sidebar-btn" aria-label="Close menu">&times;</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <button class="menu-toggle-btn" aria-label="Toggle menu">
+                    <span class="lang-en">Menu</span>
+                    <span class="lang-ar">القائمة</span>
+                </button>
+                <div class="logo-container">
+                    <img src="Icon (1).png" alt="Keddily Logo">
+                </div>
+            </div>
+
+            <div class="search-container">
+                <input type="search" id="search-input" placeholder="Search documentation...">
+                <div id="search-results" style="display: none;"></div>
+            </div>
+
+            <div class="header-right">
+                <div class="lang-switch">
+                    <button id="lang-en-btn" class="active">EN</button>
+                    <button id="lang-ar-btn">AR</button>
+                </div>
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider"></div>
+                    </label>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <main id="main-content">
+                <section id="admin-panel">
+                    <h2><span class="lang-en">Admin Panel</span><span class="lang-ar">لوحة التحكم للمشرف</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="admin-login"><span class="lang-en">Admin Login</span><span class="lang-ar">تسجيل دخول المشرف</span></h3>
+                            <p><span class="lang-en">You can access your admin dashboard by navigating to <a href="yourstore.keddily.com/admin" target="_blank"><strong>yourstore.keddily.com/admin</strong></a>. Then you will see the option to log in to the admin panel, as shown below:</span><span class="lang-ar">يمكنك الوصول إلى لوحة تحكم المشرف عن طريق الانتقال إلى <a href="yourstore.keddily.com/admin" target="_blank"><strong>yourstore.keddily.com/admin</strong></a>. سترى بعد ذلك خيار تسجيل الدخول إلى لوحة التحكم، كما هو موضح أدناه:</span></p>
+                            <img src="image_9c0665.png" alt="Admin Login Page Screenshot" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 1: The Admin Panel login screen.</span><span class="lang-ar">الشكل ١: شاشة تسجيل الدخول إلى لوحة التحكم.</span></p>
+                            <p><span class="lang-en">Here are the **default admin login details**:</span><span class="lang-ar">فيما يلي **تفاصيل تسجيل الدخول الافتراضية للمشرف**:</span></p>
+                            <ul>
+                                <li><strong><span class="lang-en">Username:</span><span class="lang-ar">اسم المستخدم:</span></strong> admin</li>
+                                <li><strong><span class="lang-en">Password:</span><span class="lang-ar">كلمة المرور:</span></strong> 12345678</li>
+                            </ul>
+                            <div class="note"><strong><span class="lang-en">Important Security Note:</span><span class="lang-ar">ملاحظة أمنية هامة:</span></strong><span class="lang-en"> Always remember to change the default admin password and username immediately after your first login to ensure the security of your website.</span><span class="lang-ar"> تذكر دائمًا تغيير كلمة المرور واسم المستخدم الافتراضيين للمشرف فورًا بعد تسجيل الدخول الأول لضمان أمان موقعك.</span></div>
+                        </li>
+                        <li>
+                            <h3 id="profile-settings"><span class="lang-en">Profile Settings</span><span class="lang-ar">إعدادات الملف الشخصي</span></h3>
+                            <p><span class="lang-en">It’s very easy to edit your admin profile info. After logging in to the admin panel, check the top right corner for the "Edit Profile" menu option, as shown in the image below:</span><span class="lang-ar">من السهل جدًا تعديل معلومات ملفك الشخصي. بعد تسجيل الدخول إلى لوحة التحكم، ابحث في الزاوية العلوية اليمنى عن خيار قائمة "تعديل الملف الشخصي"، كما هو موضح في الصورة أدناه:</span></p>
+                            <img src="image_9cd114.jpg" alt="Edit Profile Menu Location" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 2: Location of the 'Edit Profile' menu.</span><span class="lang-ar">الشكل ٢: موقع قائمة "تعديل الملف الشخصي".</span></p>
+                            <p><span class="lang-en">Now you can change your profile info as you want, including your name, email, mobile number, and profile image. We recommend changing the default admin username and email address.</span><span class="lang-ar">يمكنك الآن تغيير معلومات ملفك الشخصي كما تريد، بما في ذلك الاسم والبريد الإلكتروني ورقم الجوال وصورة الملف الشخصي. نوصي بتغيير اسم المستخدم وعنوان البريد الإلكتروني الافتراضيين للمشرف.</span></p>
+                            <img src="image-7.png" alt="Edit Profile Form" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 3: The 'Edit Profile' form.</span><span class="lang-ar">الشكل ٣: نموذج "تعديل الملف الشخصي".</span></p>
+                        </li>
+                        <li>
+                            <h3 id="password-change"><span class="lang-en">Password Change</span><span class="lang-ar">تغيير كلمة المرور</span></h3>
+                            <p><span class="lang-en">To change your password, select the "Change Password" option from the same menu dropdown in the top right corner of the admin panel. This will take you to a page where you can update your current password to a new one. You will need to enter your old password to add a new one for your admin account. If you forget your current password, we suggest using the "Forgot Password" option from the login form.</span><span class="lang-ar">لتغيير كلمة المرور، حدد خيار "تغيير كلمة المرور" من نفس القائمة المنسدلة في الزاوية العلوية اليمنى من لوحة التحكم. سينقلك هذا إلى صفحة حيث يمكنك تحديث كلمة مرورك الحالية إلى كلمة مرور جديدة. ستحتاج إلى إدخال كلمة مرورك القديمة لإضافة كلمة مرور جديدة لحساب المشرف الخاص بك. إذا نسيت كلمة مرورك الحالية، نقترح استخدام خيار "نسيت كلمة المرور" من نموذج تسجيل الدخول.</span></p>
+                            <img src="image-8-1024x367.png" alt="Change Password Form" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 4: The 'Change Password' form.</span><span class="lang-ar">الشكل ٤: نموذج "تغيير كلمة المرور".</span></p>
+                            <div class="note"><span class="lang-en">We recommend changing your default admin password.</span><span class="lang-ar">نوصي بتغيير كلمة المرور الافتراضية للمشرف.</span></div>
+                        </li>
+                    </ul>
+                </section>
+                <section id="email-settings">
+                    <h2><span class="lang-en">Email Settings</span><span class="lang-ar">إعدادات البريد الإلكتروني</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="smtp-setup"><span class="lang-en">SMTP Setup</span><span class="lang-ar">إعداد SMTP</span></h3>
+                            <p><span class="lang-en">SMTP settings are crucial for your CMS to function correctly. Without setting up your SMTP and Google reCAPTCHA, none of your website's forms will work.</span><span class="lang-ar">إعدادات SMTP ضرورية ليعمل نظام إدارة المحتوى لديك بشكل صحيح. بدون إعداد SMTP و Google reCAPTCHA، لن تعمل أي من نماذج موقع الويب الخاص بك.</span></p>
+                            <p><span class="lang-en">To configure your SMTP settings, go to "General Settings > Smtp Settings". You will see the following fields:</span><span class="lang-ar">لتهيئة إعدادات SMTP، انتقل إلى "الإعدادات العامة > إعدادات Smtp". سترى الحقول التالية:</span></p>
+                            <img src="Screenshot-at-Mar-16-11-11-28-1024x788.png" alt="SMTP Settings Page Screenshot" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 5: The SMTP Settings configuration page.</span><span class="lang-ar">الشكل ٥: صفحة تهيئة إعدادات SMTP.</span></p>
+                            <h4><span class="lang-en">SMTP Mailer:</span><span class="lang-ar">برنامج إرسال SMTP:</span></h4>
+                            <p><span class="lang-en">Select one of the following as your SMTP mailer or SMTP driver:</span><span class="lang-ar">حدد أحد الخيارات التالية كبرنامج إرسال SMTP أو مشغل SMTP:</span></p>
+                            <ul>
+                                <li>SMTP</li>
+                                <li>Mailgun</li>
+                                <li>SendMail</li>
+                                <li>PostMark</li>
+                            </ul>
+                            <h4><span class="lang-en">SMTP Mail Host:</span><span class="lang-ar">مضيف بريد SMTP:</span></h4>
+                            <p><span class="lang-en">Enter your SMTP mail host.</span><span class="lang-ar">أدخل مضيف بريد SMTP الخاص بك.</span></p>
+                            <h4><span class="lang-en">SMTP Mail Port:</span><span class="lang-ar">منفذ بريد SMTP:</span></h4>
+                            <p><span class="lang-en">Select your SMTP mail port from the list:</span><span class="lang-ar">حدد منفذ بريد SMTP الخاص بك من القائمة:</span></p>
+                            <ul>
+                                <li>587</li>
+                                <li>465</li>
+                                <li>25</li>
+                            </ul>
+                            <h4><span class="lang-en">SMTP Mail Username:</span><span class="lang-ar">اسم مستخدم بريد SMTP:</span></h4>
+                            <p><span class="lang-en">Enter your SMTP username or webmail address.</span><span class="lang-ar">أدخل اسم مستخدم SMTP أو عنوان البريد الإلكتروني الخاص بك.</span></p>
+                            <h4><span class="lang-en">SMTP Mail Password:</span><span class="lang-ar">كلمة مرور بريد SMTP:</span></h4>
+                            <p><span class="lang-en">Enter your SMTP password or webmail password.</span><span class="lang-ar">أدخل كلمة مرور SMTP أو كلمة مرور البريد الإلكتروني الخاص بك.</span></p>
+                            <h4><span class="lang-en">SMTP Mail Encryption:</span><span class="lang-ar">تشفير بريد SMTP:</span></h4>
+                            <p><span class="lang-en">Select the SMTP encryption type:</span><span class="lang-ar">حدد نوع تشفير SMTP:</span></p>
+                            <ul>
+                                <li>SSL</li>
+                                <li>TLS</li>
+                                <li><span class="lang-en">None</span><span class="lang-ar">لا شيء</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section id="user-management">
+                    <h2><span class="lang-en">User Management</span><span class="lang-ar">إدارة المستخدمين</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="user-dashboard"><span class="lang-en">User Dashboard</span><span class="lang-ar">لوحة تحكم المستخدم</span></h3>
+                            <p><span class="lang-en">It has a user dashboard to manage user orders and profile info and can manage his all packages and websites.</span><span class="lang-ar">يحتوي على لوحة تحكم للمستخدم لإدارة طلبات المستخدم ومعلومات الملف الشخصي ويمكنه إدارة جميع باقاته ومواقعه الإلكترونية.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="user-login"><span class="lang-en">Login</span><span class="lang-ar">تسجيل الدخول</span></h3>
+                            <p><span class="lang-en">Now enter user login details (username and password) to log in to the user dashboard. If a user does not have an account, they can easily create one from the "create new account" link.</span><span class="lang-ar">أدخل الآن تفاصيل تسجيل دخول المستخدم (اسم المستخدم وكلمة المرور) لتسجيل الدخول إلى لوحة تحكم المستخدم. إذا لم يكن لدى المستخدم حساب، يمكنه بسهولة إنشاء حساب جديد من رابط "إنشاء حساب جديد".</span></p>
+                            <img src="image-10.png" alt="User Login Page" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 6: User Login Page.</span><span class="lang-ar">الشكل ٦: صفحة تسجيل دخول المستخدم.</span></p>
+                            <p><span class="lang-en">After logging in to the website, the user will be redirected to their dashboard.</span><span class="lang-ar">بعد تسجيل الدخول إلى الموقع، سيتم إعادة توجيه المستخدم إلى لوحة التحكم الخاصة به.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="user-register"><span class="lang-en">Register</span><span class="lang-ar">تسجيل</span></h3>
+                            <p><span class="lang-en">It has a user dashboard to manage user purchase packages and profile info. Now enter user registration details. If the user already has an account, they can easily login using the "Already have account?" link.</span><span class="lang-ar">يحتوي على لوحة تحكم للمستخدم لإدارة باقات الشراء ومعلومات الملف الشخصي. أدخل الآن تفاصيل تسجيل المستخدم. إذا كان لدى المستخدم حساب بالفعل، يمكنه بسهولة تسجيل الدخول باستخدام رابط "هل لديك حساب بالفعل؟".</span></p>
+                            <img src="image-12.png" alt="User Register Page" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 7: User Registration Page.</span><span class="lang-ar">الشكل ٧: صفحة تسجيل المستخدم.</span></p>
+                            <p><span class="lang-en">After registering on the website, the user will be redirected to their dashboard.</span><span class="lang-ar">بعد التسجيل في الموقع، سيتم إعادة توجيه المستخدم إلى لوحة التحكم الخاصة به.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="custom-domain"><span class="lang-en">Custom Domain</span><span class="lang-ar">النطاق المخصص</span></h3>
+                            <p><span class="lang-en">To request custom domain support for your website, navigate to "Custom Domain" from the user panel side menu.</span><span class="lang-ar">لطلب دعم النطاق المخصص لموقعك، انتقل إلى "النطاق المخصص" من القائمة الجانبية للوحة المستخدم.</span></p>
+                            <p><span class="lang-en">Before sending a request for your custom domain, you need to add CNAME records (given in the table below) in your custom domain from your domain registrar account (like Namecheap, GoDaddy, etc.). CNAME records are needed to point your custom domain to our domain (nazmart.net), so that our website can show your website on your custom domain. Different domain registrars (like GoDaddy, Namecheap, etc.) have different interfaces for adding CNAME records. If you cannot find the place to add CNAME records in your domain registrar account, then please contact your domain registrar's support; they will show you the place to add CNAME records for your custom domain. They can also help you with adding CNAME record for you.</span><span class="lang-ar">قبل إرسال طلب لنطاقك المخصص، تحتاج إلى إضافة سجلات CNAME (الواردة في الجدول أدناه) في نطاقك المخصص من حساب مسجل النطاقات الخاص بك (مثل Namecheap، GoDaddy، إلخ). سجلات CNAME مطلوبة لتوجيه نطاقك المخصص إلى نطاقنا (nazmart.net)، حتى يتمكن موقعنا من عرض موقعك على نطاقك المخصص. لدى مسجلي النطاقات المختلفين (مثل GoDaddy، Namecheap، إلخ) واجهات مختلفة لإضافة سجلات CNAME. إذا لم تتمكن من العثور على مكان إضافة سجلات CNAME في حساب مسجل النطاقات الخاص بك، فيرجى الاتصال بدعم مسجل النطاقات الخاص بك؛ سيظهرون لك مكان إضافة سجلات CNAME لنطاقك المخصص. يمكنهم أيضًا مساعدتك في إضافة سجل CNAME لك.</span></p>
+                            <img src="Screenshot 2025-06-18 042643.png" alt="Custom Domain CNAME Records" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 8: CNAME Records for Custom Domain Setup.</span><span class="lang-ar">الشكل ٨: سجلات CNAME لإعداد النطاق المخصص.</span></p>
+                            <p><span class="lang-en">Use this if you are using Cloudflare:</span><span class="lang-ar">استخدم هذا إذا كنت تستخدم Cloudflare:</span></p>
+                            <ul><li><span class="lang-en">A Record: @ | 209.74.80.85 | Automatic</span><span class="lang-ar">سجل A: @ | 209.74.80.85 | تلقائي</span></li></ul>
+                        </li>
+                        <li>
+                            <h3 id="user-edit-profile"><span class="lang-en">Edit Profile</span><span class="lang-ar">تعديل الملف الشخصي</span></h3>
+                            <p><span class="lang-en">Users can easily edit their profile information from the user panel. To do this, navigate to "Edit Profile" from the user panel side menu.</span><span class="lang-ar">يمكن للمستخدمين تعديل معلومات ملفهم الشخصي بسهولة من لوحة المستخدم. للقيام بذلك، انتقل إلى "تعديل الملف الشخصي" من القائمة الجانبية للوحة المستخدم.</span></p>
+                            <p><span class="lang-en">On the "Edit Profile" page, you can update details such as your Name, Email, Mobile number, Company, Address, City, State, and Country. After making your desired changes, click "Save changes" to update your profile.</span><span class="lang-ar">في صفحة "تعديل الملف الشخصي"، يمكنك تحديث التفاصيل مثل الاسم والبريد الإلكتروني ورقم الجوال والشركة والعنوان والمدينة والولاية والبلد. بعد إجراء التغييرات المطلوبة، انقر فوق "حفظ التغييرات" لتحديث ملفك الشخصي.</span></p>
+                            <img src="image-14-1024x616.png" alt="User Edit Profile Form" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 9: The user's "Edit Profile" form.</span><span class="lang-ar">الشكل ٩: نموذج "تعديل الملف الشخصي" للمستخدم.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="user-change-password"><span class="lang-en">Change Password</span><span class="lang-ar">تغيير كلمة المرور</span></h3>
+                            <p><span class="lang-en">Users can change their password from their user panel. Navigate to "Change Password" from the user panel side menu.</span><span class="lang-ar">يمكن للمستخدمين تغيير كلمة المرور الخاصة بهم من لوحة المستخدم. انتقل إلى "تغيير كلمة المرور" من القائمة الجانبية للوحة المستخدم.</span></p>
+                            <p><span class="lang-en">On the "Change Password" page, you will be prompted to enter your new password and confirm it. Click "Save Changes" to update your password.</span><span class="lang-ar">في صفحة "تغيير كلمة المرور"، سيُطلب منك إدخال كلمة المرور الجديدة وتأكيدها. انقر فوق "حفظ التغييرات" لتحديث كلمة مرورك.</span></p>
+                            <img src="image-8-1024x367.png" alt="User Change Password Form" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 10: The user's "Change Password" form.</span><span class="lang-ar">الشكل ١٠: نموذج "تغيير كلمة المرور" للمستخدم.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="all-support-tickets"><span class="lang-en">All Support Tickets</span><span class="lang-ar">جميع تذاكر الدعم</span></h3>
+                            <p><span class="lang-en">Users can check their order packages from their user panel by navigating to "All Support Tickets" from the side menu.</span><span class="lang-ar">يمكن للمستخدمين التحقق من باقات طلباتهم من لوحة المستخدم الخاصة بهم عن طريق الانتقال إلى "جميع تذاكر الدعم" من القائمة الجانبية.</span></p>
+                            <img src="image_a74980.png" alt="All Support Tickets Menu" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 11: The "Support Tickets" option in the user panel side menu.</span><span class="lang-ar">الشكل ١١: خيار "تذاكر الدعم" في القائمة الجانبية للوحة المستخدم.</span></p>
+                            <h4><span class="lang-en">Priority:</span><span class="lang-ar">الأولوية:</span></h4>
+                            <p><span class="lang-en">Users can change ticket priority from their user dashboard using the priority dropdown.</span><span class="lang-ar">يمكن للمستخدمين تغيير أولوية التذكرة من لوحة التحكم الخاصة بهم باستخدام القائمة المنسدلة للأولوية.</span></p>
+                            <img src="Screenshot-at-Jun-10-16-57-06.png" alt="Support Ticket Priority Dropdown" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 12: Changing support ticket priority.</span><span class="lang-ar">الشكل ١٢: تغيير أولوية تذكرة الدعم.</span></p>
+                            <h4><span class="lang-en">Status:</span><span class="lang-ar">الحالة:</span></h4>
+                            <p><span class="lang-en">Users can change ticket status from their user dashboard using the status dropdown.</span><span class="lang-ar">يمكن للمستخدمين تغيير حالة التذكرة من لوحة التحكم الخاصة بهم باستخدام القائمة المنسدلة للحالة.</span></p>
+                            <img src="Screenshot-at-Jun-10-16-57-06.png" alt="Support Ticket Status Dropdown" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 13: Changing support ticket status.</span><span class="lang-ar">الشكل ١٣: تغيير حالة تذكرة الدعم.</span></p>
+                            <h4><span class="lang-en">View:</span><span class="lang-ar">عرض:</span></h4>
+                            <p><span class="lang-en">By clicking on the eye icon, you will see all conversations, and you can reply to the admin response.</span><span class="lang-ar">بالنقر على أيقونة العين، سترى جميع المحادثات، ويمكنك الرد على رد المشرف.</span></p>
+                            <img src="support-ticket-message-655x1024.jpg" alt="Support Ticket Conversation View" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 14: Viewing and replying to support ticket conversations.</span><span class="lang-ar">الشكل ١٤: عرض محادثات تذاكر الدعم والرد عليها.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="forms">
+                    <h2><span class="lang-en">Form Builder</span><span class="lang-ar">منشئ النماذج</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="get-in-touch-form-customise"><span class="lang-en">Get In Touch Form Customise</span><span class="lang-ar">تخصيص نموذج "تواصل معنا"</span></h3>
+                            <p><span class="lang-en">This CMS includes a drag & drop form builder to customize all website forms. To customize the "Get In Touch" form, navigate to "Form Builder > Get in touch form".</span><span class="lang-ar">يتضمن نظام إدارة المحتوى هذا منشئ نماذج بالسحب والإفلات لتخصيص جميع نماذج الموقع. لتخصيص نموذج "تواصل معنا"، انتقل إلى "منشئ النماذج > نموذج تواصل معنا".</span></p>
+                            <h4><span class="lang-en">Form:</span><span class="lang-ar">النموذج:</span></h4>
+                            <p><span class="lang-en">You will see the existing fields of the "Get In Touch" form, such as "Text: Your Name," "Email: Your Email," "Tel: Your Phone," and "Textarea: Your Message".</span><span class="lang-ar">سترى الحقول الحالية لنموذج "تواصل معنا"، مثل "نص: اسمك"، "بريد إلكتروني: بريدك الإلكتروني"، "هاتف: هاتفك"، و "مربع نص: رسالتك".</span></p>
+                            <img src="Screenshot-at-Jun-09-18-51-47.png" alt="Get In Touch Form Builder" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 15: The "Get In Touch Form Builder" interface.</span><span class="lang-ar">الشكل ١٥: واجهة "منشئ نماذج تواصل معنا".</span></p>
+                            <h4><span class="lang-en">Add new field to Form:</span><span class="lang-ar">إضافة حقل جديد إلى النموذج:</span></h4>
+                            <p><span class="lang-en">To add a new field, drag any desired field type (e.g., Text, Email, Tel, Select, Check Box, File, Textarea, Date) from the right side panel and drop it into the form on the left side.</span><span class="lang-ar">لإضافة حقل جديد، اسحب أي نوع حقل مرغوب (مثل نص، بريد إلكتروني، هاتف، تحديد، مربع اختيار، ملف، مربع نص، تاريخ) من اللوحة الجانبية اليمنى وأفلته في النموذج على الجانب الأيسر.</span></p>
+                            <p><span class="lang-en">After adding the field, click "Save Change" to apply your modifications.</span><span class="lang-ar">بعد إضافة الحقل، انقر فوق "حفظ التغيير" لتطبيق تعديلاتك.</span></p>
+                            <img src="Screenshot-at-Jun-09-18-52-40-1024x277.png" alt="Adding New Fields to Form" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 16: Drag and drop to add new fields to the form.</span><span class="lang-ar">الشكل ١٦: السحب والإفلات لإضافة حقول جديدة إلى النموذج.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="build-custom-form"><span class="lang-en">Build Custom Form</span><span class="lang-ar">إنشاء نموذج مخصص</span></h3>
+                            <p><span class="lang-en">You can build your own custom forms using our custom form builder. Navigate to "Appearance Settings > Form Builder > All custom form" in the admin panel.</span><span class="lang-ar">يمكنك إنشاء نماذج مخصصة خاصة بك باستخدام منشئ النماذج المخصص لدينا. انتقل إلى "إعدادات المظهر > منشئ النماذج > كل النماذج المخصصة" في لوحة التحكم.</span></p>
+                            <h4><span class="lang-en">Create New Form:</span><span class="lang-ar">إنشاء نموذج جديد:</span></h4>
+                            <p><span class="lang-en">To create a new form, you will need to provide the following details:</span><span class="lang-ar">لإنشاء نموذج جديد، ستحتاج إلى تقديم التفاصيل التالية:</span></p>
+                            <ul>
+                                <li><strong><span class="lang-en">Title:</span><span class="lang-ar">العنوان:</span></strong><span class="lang-en"> Enter a title for your new form.</span><span class="lang-ar"> أدخل عنوانًا للنموذج الجديد.</span></li>
+                                <li><strong><span class="lang-en">Receiving Email:</span><span class="lang-ar">البريد الإلكتروني للمستلم:</span></strong><span class="lang-en"> Provide the email address where you want to receive submissions from this form.</span><span class="lang-ar"> أدخل عنوان البريد الإلكتروني الذي تريد تلقي الإرسالات من هذا النموذج عليه.</span></li>
+                                <li><strong><span class="lang-en">Button Title:</span><span class="lang-ar">عنوان الزر:</span></strong><span class="lang-en"> Enter the text that will appear on the form's submit button.</span><span class="lang-ar"> أدخل النص الذي سيظهر على زر إرسال النموذج.</span></li>
+                                <li><strong><span class="lang-en">Success Message:</span><span class="lang-ar">رسالة النجاح:</span></strong><span class="lang-en"> Type the message that users will see upon successful form submission.</span><span class="lang-ar"> اكتب الرسالة التي سيراها المستخدمون عند إرسال النموذج بنجاح.</span></li>
+                            </ul>
+                            <img src="image-16.png" alt="Add New Form Interface" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 17: The "Add New Form" interface.</span><span class="lang-ar">الشكل ١٧: واجهة "إضافة نموذج جديد".</span></p>
+                            <p><span class="lang-en">After filling in the details, click "Submit" to create your new custom form.</span><span class="lang-ar">بعد ملء التفاصيل، انقر فوق "إرسال" لإنشاء نموذجك المخصص الجديد.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="payment-gateways">
+                    <h2><span class="lang-en">Payment Gateway Settings</span><span class="lang-ar">إعدادات بوابات الدفع</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="currency-settings"><span class="lang-en">Currency Settings</span><span class="lang-ar">إعدادات العملة</span></h3>
+                            <p><span class="lang-en">You can set up your own currency in this CMS, which is by default set to USD. You also need to configure the default payment gateway and the currency symbol position. If you change your currency, remember to provide the exchange rate, as this is mandatory for using all payment gateways on your website.</span><span class="lang-ar">يمكنك إعداد عملتك الخاصة في نظام إدارة المحتوى هذا، والتي تم تعيينها افتراضيًا على الدولار الأمريكي. تحتاج أيضًا إلى تكوين بوابة الدفع الافتراضية وموضع رمز العملة. إذا قمت بتغيير عملتك، تذكر تقديم سعر الصرف، لأن هذا إلزامي لاستخدام جميع بوابات الدفع على موقعك.</span></p>
+                            <img src="Screenshot-at-Mar-16-12-14-02-1024x506.png" alt="Payment Gateway Currency Settings" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 18: Payment Gateway Currency Settings.</span><span class="lang-ar">الشكل ١٨: إعدادات عملة بوابة الدفع.</span></p>
+                            <h4><span class="lang-en">Global Currency:</span><span class="lang-ar">العملة العالمية:</span></h4>
+                            <p><span class="lang-en">Set the currency that will be used for the website.</span><span class="lang-ar">حدد العملة التي سيتم استخدامها للموقع.</span></p>
+                            <h4><span class="lang-en">Symbol Position:</span><span class="lang-ar">موضع الرمز:</span></h4>
+                            <p><span class="lang-en">You can set the position of your currency symbol (e.g., Left or Right).</span><span class="lang-ar">يمكنك تحديد موضع رمز عملتك (على سبيل المثال، يسارًا أو يمينًا).</span></p>
+                            <h4><span class="lang-en">Default Payment Gateway:</span><span class="lang-ar">بوابة الدفع الافتراضية:</span></h4>
+                            <p><span class="lang-en">Set which payment gateway will be your default. This means it will be automatically selected when a user goes to purchase anything.</span><span class="lang-ar">حدد بوابة الدفع التي ستكون افتراضية. هذا يعني أنه سيتم تحديدها تلقائيًا عندما يذهب المستخدم لشراء أي شيء.</span></p>
+                            <h4><span class="lang-en">USD to INR Exchange Rate:</span><span class="lang-ar">سعر صرف الدولار الأمريكي إلى الروبية الهندية:</span></h4>
+                            <p><span class="lang-en">Enter your currency conversion rate for INR. This is mandatory for using any Indian payment gateway.</span><span class="lang-ar">أدخل سعر تحويل عملتك للروبية الهندية. هذا إلزامي لاستخدام أي بوابة دفع هندية.</span></p>
+                            <h4><span class="lang-en">USD to NGN Exchange Rate:</span><span class="lang-ar">سعر صرف الدولار الأمريكي إلى النيرة النيجيرية:</span></h4>
+                            <p><span class="lang-en">Enter your currency conversion rate for NGN. This is mandatory for using the Paystack payment gateway.</span><span class="lang-ar">أدخل سعر تحويل عملتك للنيرة النيجيرية. هذا إلزامي لاستخدام بوابة الدفع Paystack.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="paypal-settings"><span class="lang-en">Paypal</span><span class="lang-ar">باي بال</span></h3>
+                            <p><span class="lang-en">If you want to use PayPal in your CMS, you need to set up your PayPal gateway settings. Go to "General settings > Payment Gateway Settings > PayPal settings".</span><span class="lang-ar">إذا كنت ترغب في استخدام PayPal في نظام إدارة المحتوى الخاص بك، فأنت بحاجة إلى إعداد إعدادات بوابة PayPal الخاصة بك. انتقل إلى "الإعدادات العامة > إعدادات بوابة الدفع > إعدادات PayPal".</span></p>
+                            <p><span class="lang-en">You need to create an app for the PayPal API. You can check the PayPal documentation for more information on creating an app.</span><span class="lang-ar">تحتاج إلى إنشاء تطبيق لواجهة برمجة تطبيقات PayPal. يمكنك مراجعة وثائق PayPal لمزيد من المعلومات حول إنشاء تطبيق.</span></p>
+                            <p><span class="lang-en">Here is a list of currencies supported by PayPal: ['AUD','BRL','CAD','CNY','CZK','DKK','EUR','HKD','HUF','INR','ILS','JPY','MYR','MXN','TWD','NZD','NOK','PHP','PLN','GBP','RUB','SGD','SEK','CHF','THB','USD']. If your currency is not supported by PayPal, the CMS will charge customers in USD based on your configured conversion rate in the currency settings.</span><span class="lang-ar">فيما يلي قائمة بالعملات التي يدعمها PayPal: ['AUD','BRL','CAD','CNY','CZK','DKK','EUR','HKD','HUF','INR','ILS','JPY','MYR','MXN','TWD','NZD','NOK','PHP','PLN','GBP','RUB','SGD','SEK','CHF','THB','USD']. إذا لم تكن عملتك مدعومة من قبل PayPal، فسيقوم نظام إدارة المحتوى بفرض رسوم على العملاء بالدولار الأمريكي بناءً على سعر التحويل الذي قمت بتكوينه في إعدادات العملة.</span></p>
+                            <img src="image-4-1024x502.png" alt="PayPal Gateway Settings" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 19: PayPal Gateway Settings.</span><span class="lang-ar">الشكل ١٩: إعدادات بوابة PayPal.</span></p>
+                            <h4><span class="lang-en">Enable Test Mode:</span><span class="lang-ar">تمكين وضع الاختبار:</span></h4>
+                            <p><span class="lang-en">By enabling this, you can activate PayPal sandbox for testing payments.</span><span class="lang-ar">بتمكين هذا، يمكنك تنشيط وضع الاختبار (sandbox) في PayPal لاختبار المدفوعات.</span></p>
+                            <h4><span class="lang-en">Enable/Disable Paypal:</span><span class="lang-ar">تمكين/تعطيل PayPal:</span></h4>
+                            <p><span class="lang-en">You can enable or disable the PayPal payment gateway in the CMS.</span><span class="lang-ar">يمكنك تمكين أو تعطيل بوابة الدفع PayPal في نظام إدارة المحتوى.</span></p>
+                            <h4><span class="lang-en">Paypal Logo:</span><span class="lang-ar">شعار PayPal:</span></h4>
+                            <p><span class="lang-en">You can set your selected PayPal logo, which will be shown on the frontend for users to select as a payment gateway.</span><span class="lang-ar">يمكنك تعيين شعار PayPal الذي اخترته، والذي سيظهر في الواجهة الأمامية للمستخدمين لتحديده كبوابة دفع.</span></p>
+                            <h4><span class="lang-en">Paypal Sandbox Client ID:</span><span class="lang-ar">معرف عميل PayPal Sandbox:</span></h4>
+                            <p><span class="lang-en">Enter your PayPal sandbox client ID. This is mandatory for PayPal to function in test mode in this CMS.</span><span class="lang-ar">أدخل معرف عميل PayPal sandbox الخاص بك. هذا إلزامي ليعمل PayPal في وضع الاختبار في نظام إدارة المحتوى هذا.</span></p>
+                            <h4><span class="lang-en">Paypal Sandbox Client Secret:</span><span class="lang-ar">سر عميل PayPal Sandbox:</span></h4>
+                            <p><span class="lang-en">Enter your PayPal sandbox client secret. This is mandatory for PayPal to function in test mode in this CMS.</span><span class="lang-ar">أدخل سر عميل PayPal sandbox الخاص بك. هذا إلزامي ليعمل PayPal في وضع الاختبار في نظام إدارة المحتوى هذا.</span></p>
+                            <h4><span class="lang-en">Paypal Sandbox App ID:</span><span class="lang-ar">معرف تطبيق PayPal Sandbox:</span></h4>
+                            <p><span class="lang-en">Enter your PayPal sandbox app ID.</span><span class="lang-ar">أدخل معرف تطبيق PayPal sandbox الخاص بك.</span></p>
+                            <h4><span class="lang-en">Paypal Live Client ID:</span><span class="lang-ar">معرف عميل PayPal المباشر:</span></h4>
+                            <p><span class="lang-en">Enter your PayPal live client ID (or PayPal merchant ID). This is mandatory for PayPal to work in live mode in this CMS.</span><span class="lang-ar">أدخل معرف عميل PayPal المباشر (أو معرف تاجر PayPal). هذا إلزامي ليعمل PayPal في الوضع المباشر في نظام إدارة المحتوى هذا.</span></p>
+                            <h4><span class="lang-en">Paypal Live Client Secret:</span><span class="lang-ar">سر عميل PayPal المباشر:</span></h4>
+                            <p><span class="lang-en">Enter your PayPal live client secret. This is mandatory for PayPal to work in live mode in this CMS.</span><span class="lang-ar">أدخل سر عميل PayPal المباشر الخاص بك. هذا إلزامي ليعمل PayPal في الوضع المباشر في نظام إدارة المحتوى هذا.</span></p>
+                            <h4><span class="lang-en">Paypal Live App ID:</span><span class="lang-ar">معرف تطبيق PayPal المباشر:</span></h4>
+                            <p><span class="lang-en">Enter your PayPal live app ID.</span><span class="lang-ar">أدخل معرف تطبيق PayPal المباشر الخاص بك.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="manual-payment-settings"><span class="lang-en">Manual Payment</span><span class="lang-ar">الدفع اليدوي</span></h3>
+                            <p><span class="lang-en">If you want to use manual payment in your CMS, you have to set up your manual payment gateway settings. Go to "General settings > Payment Gateway Settings > Manual Payment settings".</span><span class="lang-ar">إذا كنت ترغب في استخدام الدفع اليدوي في نظام إدارة المحتوى الخاص بك، فيجب عليك إعداد إعدادات بوابة الدفع اليدوي. انتقل إلى "الإعدادات العامة > إعدادات بوابة الدفع > إعدادات الدفع اليدوي".</span></p>
+                            <img src="Screenshot-at-Mar-17-12-58-40.png" alt="Manual Payment Settings" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 20: Manual Payment Settings.</span><span class="lang-ar">الشكل ٢٠: إعدادات الدفع اليدوي.</span></p>
+                            <h4><span class="lang-en">Enable/Disable Manual Payment:</span><span class="lang-ar">تمكين/تعطيل الدفع اليدوي:</span></h4>
+                            <p><span class="lang-en">You can enable or disable the Manual Payment gateway in the CMS.</span><span class="lang-ar">يمكنك تمكين أو تعطيل بوابة الدفع اليدوي في نظام إدارة المحتوى.</span></p>
+                            <h4><span class="lang-en">Manual Payment Logo:</span><span class="lang-ar">شعار الدفع اليدوي:</span></h4>
+                            <p><span class="lang-en">You can set your selected Manual Payment logo, which will be shown on the frontend for users to select as a payment gateway.</span><span class="lang-ar">يمكنك تعيين شعار الدفع اليدوي الذي اخترته، والذي سيظهر في الواجهة الأمامية للمستخدمين لتحديده كبوابة دفع.</span></p>
+                            <h4><span class="lang-en">Manual Payment Name:</span><span class="lang-ar">اسم الدفع اليدوي:</span></h4>
+                            <p><span class="lang-en">Enter the Manual Payment Name. This is mandatory for Manual Payment to work in this CMS.</span><span class="lang-ar">أدخل اسم الدفع اليدوي. هذا إلزامي ليعمل الدفع اليدوي في نظام إدارة المحتوى هذا.</span></p>
+                            <h4><span class="lang-en">Manual Payment Description:</span><span class="lang-ar">وصف الدفع اليدوي:</span></h4>
+                            <p><span class="lang-en">Enter a description about manual payment, explaining how users will pay you and how they can provide payment details to you.</span><span class="lang-ar">أدخل وصفًا حول الدفع اليدوي، موضحًا كيف سيدفع لك المستخدمون وكيف يمكنهم تقديم تفاصيل الدفع لك.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="paytabs-api"><span class="lang-en">How to get Paytabs payment gateway API credentials</span><span class="lang-ar">كيفية الحصول على بيانات اعتماد واجهة برمجة تطبيقات بوابة الدفع Paytabs</span></h3>
+                            <p><span class="lang-en">To get API key and site ID for the Paytabs payment gateway, log in to your merchant panel using the URL <a href="https://merchant-global.paytabs.com/merchant/home" target="_blank">https://merchant-global.paytabs.com/merchant/home</a>.</span><span class="lang-ar">للحصول على مفتاح API ومعرف الموقع لبوابة الدفع Paytabs، قم بتسجيل الدخول إلى لوحة التاجر الخاصة بك باستخدام الرابط <a href="https://merchant-global.paytabs.com/merchant/home" target="_blank">https://merchant-global.paytabs.com/merchant/home</a>.</span></p>
+                            <img src="image-37-1024x607.png" alt="Paytabs Merchant Panel Home" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 21: Paytabs Merchant Panel Home.</span><span class="lang-ar">الشكل ٢١: الصفحة الرئيسية للوحة تاجر Paytabs.</span></p>
+                            <p><span class="lang-en">Go to the "Developers" page, where you will find the API key.</span><span class="lang-ar">انتقل إلى صفحة "المطورين"، حيث ستجد مفتاح API.</span></p>
+                            <img src="image-38-1024x438.png" alt="Paytabs Developers Page" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 22: Paytabs Developers Page.</span><span class="lang-ar">الشكل ٢٢: صفحة المطورين في Paytabs.</span></p>
+                            <p><span class="lang-en">Then, navigate to "API Keys > Key Management" to view your API key details.</span><span class="lang-ar">بعد ذلك، انتقل إلى "مفاتيح API > إدارة المفاتيح" لعرض تفاصيل مفتاح API الخاص بك.</span></p>
+                            <img src="image-39-1024x412.png" alt="Paytabs API Keys Management" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 23: Paytabs API Keys Management.</span><span class="lang-ar">الشكل ٢٣: إدارة مفاتيح API في Paytabs.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="languages">
+                    <h2><span class="lang-en">Languages</span><span class="lang-ar">اللغات</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="add-new-languages"><span class="lang-en">Add new languages</span><span class="lang-ar">إضافة لغات جديدة</span></h3>
+                            <p><span class="lang-en">This CMS comes with multilingual support, meaning you can use multiple languages. To add a new language, go to the admin panel "Languages > Add New Language".</span><span class="lang-ar">يأتي نظام إدارة المحتوى هذا بدعم متعدد اللغات، مما يعني أنه يمكنك استخدام لغات متعددة. لإضافة لغة جديدة، انتقل إلى لوحة التحكم "اللغات > إضافة لغة جديدة".</span></p>
+                            <img src="Screenshot-at-Apr-07-19-02-35.png" alt="Add New Language Interface" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 24: The "Add New Language" interface.</span><span class="lang-ar">الشكل ٢٤: واجهة "إضافة لغة جديدة".</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="general-questions">
+                    <h2><span class="lang-en">General Questions</span><span class="lang-ar">أسئلة عامة</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="change-404-content"><span class="lang-en">How to change 404 page content</span><span class="lang-ar">كيفية تغيير محتوى صفحة 404</span></h3>
+                            <p><span class="lang-en">This cms comes with many home page variant, you can use any of them for your website, go to “Appearance Settings > 404 Page Manage” select your home page variant and save change. Title: enter title for 404 page. Subtitle: you can change subtitle of the page from here. Paragraph: you can change paragraph from here. Button Text: enter button text.</span><span class="lang-ar">يأتي نظام إدارة المحتوى هذا مع العديد من متغيرات الصفحة الرئيسية، يمكنك استخدام أي منها لموقعك على الويب، انتقل إلى "إعدادات المظهر > إدارة صفحة 404" حدد متغير صفحتك الرئيسية واحفظ التغيير. العنوان: أدخل عنوانًا لصفحة 404. العنوان الفرعي: يمكنك تغيير العنوان الفرعي للصفحة من هنا. الفقرة: يمكنك تغيير الفقرة من هنا. نص الزر: أدخل نص الزر.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="change-maintain-content"><span class="lang-en">How to change maintain page content</span><span class="lang-ar">كيفية تغيير محتوى صفحة الصيانة</span></h3>
+                            <p><span class="lang-en">This cms has option to put your website in Maintenance mode, in Maintenance mode all pages are visible only for website admin. all the visitor will see the Maintenance page in that time. Enable/disable Maintenance mode to enable/disable maintains mode you have to go to “General settings > basic settings”.</span><span class="lang-ar">يحتوي نظام إدارة المحتوى هذا على خيار لوضع موقعك في وضع الصيانة، في وضع الصيانة تكون جميع الصفحات مرئية فقط لمشرف الموقع. سيرى جميع الزوار صفحة الصيانة في ذلك الوقت. لتمكين/تعطيل وضع الصيانة، يجب عليك الانتقال إلى "الإعدادات العامة > الإعدادات الأساسية".</span></p>
+                        </li>
+                        <li>
+                            <h3 id="add-third-party-script"><span class="lang-en">How to add third party script</span><span class="lang-ar">كيفية إضافة سكربت طرف ثالث</span></h3>
+                            <p><span class="lang-en">You can add any third party script code , example: facebook pixels, google tags manager etc. To Add code go to “General settings > Page Settings”. This code will be add inside head> tag.</span><span class="lang-ar">يمكنك إضافة أي كود سكربت طرف ثالث، على سبيل المثال: بيكسل فيسبوك، مدير علامات جوجل، إلخ. لإضافة الكود انتقل إلى "الإعدادات العامة > إعدادات الصفحة". ستتم إضافة هذا الكود داخل وسم &lt;head&gt;.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="add-whatsapp-button"><span class="lang-en">How to add WhatsApp button</span><span class="lang-ar">كيفية إضافة زر واتساب</span></h3>
+                            <p><span class="lang-en">To add a WhatsApp button to your CMS, you will use a third-party script, for example, from GetButton.io. The CMS allows for the insertion of such scripts in the 'Third Party Scripts Settings'.</span><span class="lang-ar">لإضافة زر واتساب إلى نظام إدارة المحتوى الخاص بك، ستستخدم سكربتًا من جهة خارجية، على سبيل المثال، من GetButton.io. يسمح نظام إدارة المحتوى بإدراج مثل هذه السكربتات في "إعدادات سكربتات الطرف الثالث".</span></p>
+                            <h4><span class="lang-en">Steps to get the WhatsApp embed code from GetButton.io:</span><span class="lang-ar">خطوات الحصول على كود تضمين واتساب من GetButton.io:</span></h4>
+                            <ol>
+                                <li><span class="lang-en">Go to <a href="https://getbutton.io" target="_blank">GetButton.io</a>.</span><span class="lang-ar">اذهب إلى <a href="https://getbutton.io" target="_blank">GetButton.io</a>.</span></li>
+                                <li><span class="lang-en">Select your desired WhatsApp icon and enter your phone number.</span><span class="lang-ar">حدد أيقونة واتساب التي تريدها وأدخل رقم هاتفك.</span></li>
+                                <li><span class="lang-en">Customize the button according to your needs, including the company logo URL, greeting message, position (Left or Right), call to action, and WhatsApp pre-filled message.</span><span class="lang-ar">قم بتخصيص الزر وفقًا لاحتياجاتك، بما في ذلك رابط شعار الشركة، ورسالة الترحيب، والموضع (يسار أو يمين)، ودعوة لاتخاذ إجراء، ورسالة واتساب مملوءة مسبقًا.</span></li>
+                                <li><span class="lang-en">Enter your email address and click "Get Button Code" to have the code sent to your email.</span><span class="lang-ar">أدخل عنوان بريدك الإلكتروني وانقر على "الحصول على كود الزر" ليتم إرسال الكود إلى بريدك الإلكتروني.</span></li>
+                            </ol>
+                            <p><span class="lang-en">Once you have the button code from GetButton.io, follow these steps to add it to your Keddily CMS:</span><span class="lang-ar">بمجرد حصولك على كود الزر من GetButton.io، اتبع هذه الخطوات لإضافته إلى نظام إدارة المحتوى Keddily الخاص بك:</span></p>
+                            <h4><span class="lang-en">Steps to add the WhatsApp button code in the CMS:</span><span class="lang-ar">خطوات إضافة كود زر واتساب في نظام إدارة المحتوى:</span></h4>
+                            <ol>
+                                <li><span class="lang-en">In your Keddily admin panel, navigate to "General settings > Third Party Script".</span><span class="lang-ar">في لوحة تحكم Keddily الخاصة بك، انتقل إلى "الإعدادات العامة > سكربت طرف ثالث".</span></li>
+                                <li><span class="lang-en">You will find a text area labeled "Third Party Api Code".</span><span class="lang-ar">ستجد منطقة نصية تحمل اسم "كود واجهة برمجة تطبيقات الطرف الثالث".</span></li>
+                                <li><span class="lang-en">Paste the WhatsApp button code you received from GetButton.io into this text area.</span><span class="lang-ar">الصق كود زر واتساب الذي تلقيته من GetButton.io في هذه المنطقة النصية.</span></li>
+                                <li><span class="lang-en">This code will be loaded before the `&lt;/head&gt;` tag of your website.</span><span class="lang-ar">سيتم تحميل هذا الكود قبل وسم `&lt;/head&gt;` الخاص بموقعك.</span></li>
+                            </ol>
+                            <img src="Screenshot-at-Jun-11-20-34-48-1024x557.png" alt="Customize GetButton.io WhatsApp Button" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 27: Customizing the WhatsApp button on GetButton.io.</span><span class="lang-ar">الشكل ٢٧: تخصيص زر واتساب على GetButton.io.</span></p>
+                            <img src="Screenshot-at-Jun-11-20-35-26.png" alt="Get Button Code from GetButton.io" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 28: Getting the WhatsApp button code from GetButton.io.</span><span class="lang-ar">الشكل ٢٨: الحصول على كود زر واتساب من GetButton.io.</span></p>
+                            <img src="Screenshot-at-Jun-11-14-36-49-1024x234.png" alt="Third Party Scripts Settings in Admin Panel" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 29: The 'Third Party Scripts Settings' in the Keddily Admin Panel where you paste the code.</span><span class="lang-ar">الشكل ٢٩: "إعدادات سكربتات الطرف الثالث" في لوحة تحكم Keddily حيث تقوم بلصق الكود.</span></p>
+                            <div class="note"><span class="lang-en">This 'Third Party Api Code' section is also used for adding other third-party scripts like Facebook Pixels or Google Tag Manager.</span><span class="lang-ar">يُستخدم قسم "كود واجهة برمجة تطبيقات الطرف الثالث" هذا أيضًا لإضافة سكربتات أخرى من جهات خارجية مثل بيكسل فيسبوك أو مدير علامات جوجل.</span></div>
+                        </li>
+                    </ul>
+                </section>
+                <section id="menu-management">
+                    <h2><span class="lang-en">Menu Management</span><span class="lang-ar">إدارة القوائم</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="create-new-menu"><span class="lang-en">Create a New Menu</span><span class="lang-ar">إنشاء قائمة جديدة</span></h3>
+                            <p><span class="lang-en">This CMS comes with a Drag & Drop menu builder, allowing you to easily build your own menu. To create a new menu, go to "Appearance Settings > Menu Manage" in the admin panel.</span><span class="lang-ar">يأتي نظام إدارة المحتوى هذا مع منشئ قوائم بالسحب والإفلات، مما يتيح لك إنشاء قائمتك الخاصة بسهولة. لإنشاء قائمة جديدة، انتقل إلى "إعدادات المظهر > إدارة القوائم" في لوحة التحكم.</span></p>
+                            <h4><span class="lang-en">Step 01: Create a Menu</span><span class="lang-ar">الخطوة ٠١: إنشاء قائمة</span></h4>
+                            <p><span class="lang-en">Give your new menu a title and select its language. Then click "create a menu".</span><span class="lang-ar">أعطِ قائمتك الجديدة عنوانًا وحدد لغتها. ثم انقر فوق "إنشاء قائمة".</span></p>
+                            <img src="create-menu.png" alt="Create a Menu Interface" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 30: Creating a new menu by providing a title and selecting a language.</span><span class="lang-ar">الشكل ٣٠: إنشاء قائمة جديدة عن طريق تقديم عنوان وتحديد لغة.</span></p>
+                            <h4><span class="lang-en">Step 02: Edit Menu</span><span class="lang-ar">الخطوة ٠٢: تحرير القائمة</span></h4>
+                            <p><span class="lang-en">After creating the menu, you can now edit it as per your needs.</span><span class="lang-ar">بعد إنشاء القائمة، يمكنك الآن تحريرها وفقًا لاحتياجاتك.</span></p>
+                            <img src="edit-menu.png" alt="Edit Menu Interface" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 31: The menu editing interface.</span><span class="lang-ar">الشكل ٣١: واجهة تحرير القائمة.</span></p>
+                            <h4><span class="lang-en">Step 03: Customize Menu Items</span><span class="lang-ar">الخطوة ٠٣: تخصيص عناصر القائمة</span></h4>
+                            <p><span class="lang-en">Select which pages or custom links you want to add to the menu. Click "Add to Menu", and it will be added to the bottom of your menu list. You can then drag and drop menu items to reorder them as needed. To create a dropdown menu, simply drag a menu item to the right, nesting it under another item.</span><span class="lang-ar">حدد الصفحات أو الروابط المخصصة التي تريد إضافتها إلى القائمة. انقر فوق "إضافة إلى القائمة"، وسيتم إضافتها إلى أسفل قائمة القوائم الخاصة بك. يمكنك بعد ذلك سحب وإفلات عناصر القائمة لإعادة ترتيبها حسب الحاجة. لإنشاء قائمة منسدلة، ما عليك سوى سحب عنصر قائمة إلى اليمين، وتضمينه تحت عنصر آخر.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="add-menu-item"><span class="lang-en">Add new item to menu</span><span class="lang-ar">إضافة عنصر جديد إلى القائمة</span></h3>
+                            <p><span class="lang-en">Select the page you want to add to the menu and click "Add to Menu". It will be added at the bottom of the menu list.</span><span class="lang-ar">حدد الصفحة التي تريد إضافتها إلى القائمة وانقر على "إضافة إلى القائمة". سيتم إضافتها في أسفل قائمة القوائم.</span></p>
+                            <img src="add-item-to-menu.png" alt="Add Item to Menu" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 32: Adding a new item to the menu.</span><span class="lang-ar">الشكل ٣٢: إضافة عنصر جديد إلى القائمة.</span></p>
+                            <h4><span class="lang-en">Set Menu Order:</span><span class="lang-ar">تعيين ترتيب القائمة:</span></h4>
+                            <p><span class="lang-en">To set the order of your menu items, simply drag a menu item up or down and release it where you need it to be positioned.</span><span class="lang-ar">لتعيين ترتيب عناصر القائمة، ما عليك سوى سحب عنصر قائمة لأعلى أو لأسفل وإفلاته في المكان الذي تحتاجه.</span></p>
+                            <img src="set-menu-order.png" alt="Set Menu Order" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 33: Dragging and dropping to set the menu item order.</span><span class="lang-ar">الشكل ٣٣: السحب والإفلات لتعيين ترتيب عناصر القائمة.</span></p>
+                            <h4><span class="lang-en">Create Dropdown:</span><span class="lang-ar">إنشاء قائمة منسدلة:</span></h4>
+                            <p><span class="lang-en">To create a dropdown menu, drag the item you want to make a dropdown to the right. You will see it nested under the top item. In this way, you can create dropdown menus and also add multiple levels of dropdowns.</span><span class="lang-ar">لإنشاء قائمة منسدلة، اسحب العنصر الذي تريد جعله قائمة منسدلة إلى اليمين. ستراه متداخلاً تحت العنصر العلوي. بهذه الطريقة، يمكنك إنشاء قوائم منسدلة وكذلك إضافة مستويات متعددة من القوائم المنسدلة.</span></p>
+                            <img src="create-dropdown.png" alt="Create Dropdown Menu" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 34: Creating a dropdown menu by nesting items.</span><span class="lang-ar">الشكل ٣٤: إنشاء قائمة منسدلة عن طريق تداخل العناصر.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="add-custom-url"><span class="lang-en">Add a custom URL as a menu item</span><span class="lang-ar">إضافة عنوان URL مخصص كعنصر قائمة</span></h3>
+                            <p><span class="lang-en">You can also add custom URLs as menu items. This is useful for linking to external websites or specific sections not covered by your CMS pages. You'll typically find an option to add 'Custom Links' where you can enter the URL and the link text.</span><span class="lang-ar">يمكنك أيضًا إضافة عناوين URL مخصصة كعناصر قائمة. هذا مفيد للربط بمواقع ويب خارجية أو أقسام محددة لا تغطيها صفحات نظام إدارة المحتوى الخاص بك. ستجد عادةً خيارًا لإضافة "روابط مخصصة" حيث يمكنك إدخال عنوان URL ونص الرابط.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="widgets">
+                    <h2><span class="lang-en">Widget Builder</span><span class="lang-ar">منشئ الويدجات</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="footer-widgets"><span class="lang-en">Footer Widgets</span><span class="lang-ar">ويدجات التذييل</span></h3>
+                            <p><span class="lang-en">This CMS comes with a drag & drop widget builder, which helps you build your own footer as you want. Go to the admin panel "Appearance Settings > Widgets Builder".</span><span class="lang-ar">يأتي نظام إدارة المحتوى هذا مع منشئ ويدجات بالسحب والإفلات، مما يساعدك على بناء تذييل خاص بك كما تريد. انتقل إلى لوحة التحكم "إعدادات المظهر > منشئ الويدجات".</span></p>
+                            <h4><span class="lang-en">Step 01: Drag any widget to the widget area.</span><span class="lang-ar">الخطوة ٠١: اسحب أي ويدجت إلى منطقة الويدجات.</span></h4>
+                            <p><span class="lang-en">Drag any desired widget (e.g., text, image, navigation menu) from the available widgets and drop it into the designated footer widget area. Then, provide all the necessary content for the widget and save it.</span><span class="lang-ar">اسحب أي ويدجت مرغوب (على سبيل المثال، نص، صورة، قائمة تنقل) من الويدجات المتاحة وأفلته في منطقة ويدجات التذييل المخصصة. بعد ذلك، قدم كل المحتوى الضروري للويدجت واحفظه.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="products-module">
+                    <h2><span class="lang-en">Products Module</span><span class="lang-ar">وحدة المنتجات</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="add-new-products"><span class="lang-en">Add New Products</span><span class="lang-ar">إضافة منتجات جديدة</span></h3>
+                            <p><span class="lang-en">To add a new product, go to "Products > Add New Product" in the admin panel.</span><span class="lang-ar">لإضافة منتج جديد، انتقل إلى "المنتجات > إضافة منتج جديد" في لوحة التحكم.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="product-attributes"><span class="lang-en">Attributes</span><span class="lang-ar">السمات</span></h3>
+                            <p><span class="lang-en">To add your own customized product attributes for inventory management, go to "Admin panel > Attribute > Product Attributes".</span><span class="lang-ar">لإضافة سمات منتج مخصصة خاصة بك لإدارة المخزون، انتقل إلى "لوحة التحكم > السمة > سمات المنتج".</span></p>
+                            <h4><span class="lang-en">Create new attributes</span><span class="lang-ar">إنشاء سمات جديدة</span></h4>
+                            <p><span class="lang-en">You can add new variants with a name and can add many terms into it, which you can use with the inventory management system.</span><span class="lang-ar">يمكنك إضافة متغيرات جديدة باسم ويمكنك إضافة العديد من المصطلحات إليها، والتي يمكنك استخدامها مع نظام إدارة المخزون.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="tax-settings"><span class="lang-en">Tax Settings</span><span class="lang-ar">إعدادات الضرائب</span></h3>
+                            <ul>
+                                <li>
+                                    <h4 id="create-country-tax"><span class="lang-en">How to create country tax</span><span class="lang-ar">كيفية إنشاء ضريبة الدولة</span></h4>
+                                    <p><span class="lang-en">With this CMS, you can set tax based on the country in percentage or a fixed amount. Go to "Tax Settings > Country Tax", select the country, and set the tax percentage or a fixed amount.</span><span class="lang-ar">باستخدام نظام إدارة المحتوى هذا، يمكنك تعيين ضريبة بناءً على البلد بنسبة مئوية أو مبلغ ثابت. انتقل إلى "إعدادات الضرائب > ضريبة الدولة"، حدد البلد، وقم بتعيين النسبة المئوية للضريبة أو مبلغ ثابت.</span></p>
+                                </li>
+                                <li>
+                                    <h4 id="set-state-tax"><span class="lang-en">How to set state tax</span><span class="lang-ar">كيفية تعيين ضريبة الولاية</span></h4>
+                                    <p><span class="lang-en">With this CMS, you can set tax based on the country and state in percentage or a fixed amount. Go to "Tax Settings > State Tax", select the country and state, and then set the tax percentage or a fixed amount.</span><span class="lang-ar">باستخدام نظام إدارة المحتوى هذا، يمكنك تعيين ضريبة بناءً على البلد والولاية بنسبة مئوية أو مبلغ ثابت. انتقل إلى "إعدادات الضرائب > ضريبة الولاية"، حدد البلد والولاية، ثم قم بتعيين النسبة المئوية للضريبة أو مبلغ ثابت.</span></p>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section id="shipping-settings">
+                    <h2><span class="lang-en">Shipping Settings</span><span class="lang-ar">إعدادات الشحن</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="create-shipping-zone"><span class="lang-en">How to create a shipping zone</span><span class="lang-ar">كيفية إنشاء منطقة شحن</span></h3>
+                            <p><span class="lang-en">With this CMS, you can create as many shipping zones as you want. Go to "Shipping Manage > Shipping Zones".</span><span class="lang-ar">باستخدام نظام إدارة المحتوى هذا، يمكنك إنشاء العديد من مناطق الشحن كما تريد. انتقل إلى "إدارة الشحن > مناطق الشحن".</span></p>
+                        </li>
+                        <li>
+                            <h3 id="add-shipping-methods"><span class="lang-en">How to add shipping methods</span><span class="lang-ar">كيفية إضافة طرق الشحن</span></h3>
+                            <p><span class="lang-en">With this CMS, you can create as many shipping methods as you want from "Shipping Manage > Shipping Method".</span><span class="lang-ar">باستخدام نظام إدارة المحتوى هذا، يمكنك إنشاء العديد من طرق الشحن كما تريد من "إدارة الشحن > طريقة الشحن".</span></p>
+                            <p><span class="lang-en">You can control many aspects of a shipping method, such as:</span><span class="lang-ar">يمكنك التحكم في العديد من جوانب طريقة الشحن، مثل:</span></p>
+                            <ul>
+                                <li><span class="lang-en">Whether this shipping method requires a coupon to process.</span><span class="lang-ar">ما إذا كانت طريقة الشحن هذه تتطلب قسيمة لمعالجتها.</span></li>
+                                <li><span class="lang-en">Whether this shipping method requires a minimum number or amount for the order.</span><span class="lang-ar">ما إذا كانت طريقة الشحن هذه تتطلب حدًا أدنى من العدد أو المبلغ للطلب.</span></li>
+                                <li><span class="lang-en">Whether this shipping method is taxable or not.</span><span class="lang-ar">ما إذا كانت طريقة الشحن هذه خاضعة للضريبة أم لا.</span></li>
+                            </ul>
+                            <p><span class="lang-en">You can also set a default shipping method which will be shown initially on the checkout page.</span><span class="lang-ar">يمكنك أيضًا تعيين طريقة شحن افتراضية سيتم عرضها مبدئيًا في صفحة الدفع.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="promotional-campaigns">
+                    <h2><span class="lang-en">Promotional Campaigns</span><span class="lang-ar">الحملات الترويجية</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="coupon-manage"><span class="lang-en">Coupon Manage</span><span class="lang-ar">إدارة القسائم</span></h3>
+                            <p><span class="lang-en">To create your own promotional campaign, go to "Admin Panel > Campaign". This campaign allows you to sell your product with a discount for a limited time and with limited stock.</span><span class="lang-ar">لإنشاء حملتك الترويجية الخاصة، انتقل إلى "لوحة التحكم > الحملة". تتيح لك هذه الحملة بيع منتجك بخصم لفترة محدودة وبمخزون محدود.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="support-tickets">
+                    <h2><span class="lang-en">Support Tickets</span><span class="lang-ar">تذاكر الدعم</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="add-new-ticket"><span class="lang-en">Add New Ticket</span><span class="lang-ar">إضافة تذكرة جديدة</span></h3>
+                            <p><span class="lang-en">To manage the Support Module, go to "Support Tickets > Add New Ticket" in the admin panel.</span><span class="lang-ar">لإدارة وحدة الدعم، انتقل إلى "تذاكر الدعم > إضافة تذكرة جديدة" في لوحة التحكم.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="all-tickets"><span class="lang-en">All Tickets</span><span class="lang-ar">جميع التذاكر</span></h3>
+                            <p><span class="lang-en">To manage the Support Module, go to "Support Tickets > All Tickets". This section allows you to view and manage all submitted support tickets.</span><span class="lang-ar">لإدارة وحدة الدعم، انتقل إلى "تذاكر الدعم > جميع التذاكر". يتيح لك هذا القسم عرض وإدارة جميع تذاكر الدعم المقدمة.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="page-settings">
+                    <h2><span class="lang-en">Page Settings</span><span class="lang-ar">إعدادات الصفحة</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="how-to-create-page"><span class="lang-en">How to create a page?</span><span class="lang-ar">كيفية إنشاء صفحة؟</span></h3>
+                            <p><span class="lang-en">This CMS has the option to create your own pages. In many cases, we need to create our own pages for the website. To create a new page, go to the admin panel "Pages > Add New Page" and fill in the content, then save changes.</span><span class="lang-ar">يحتوي نظام إدارة المحتوى هذا على خيار إنشاء صفحاتك الخاصة. في كثير من الحالات، نحتاج إلى إنشاء صفحاتنا الخاصة للموقع. لإنشاء صفحة جديدة، انتقل إلى لوحة التحكم "الصفحات > إضافة صفحة جديدة" واملأ المحتوى، ثم احفظ التغييرات.</span></p>
+                            <img src="image-16-938x1024.png" alt="Create New Page Interface" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 25: The "Create New Page" interface.</span><span class="lang-ar">الشكل ٢٥: واجهة "إنشاء صفحة جديدة".</span></p>
+                            <p><span class="lang-en">You will find all created pages in "Pages > All Pages".</span><span class="lang-ar">ستجد جميع الصفحات التي تم إنشاؤها في "الصفحات > جميع الصفحات".</span></p>
+                            <img src="image-17-1024x533.png" alt="All Pages List" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 26: The "All Pages" list.</span><span class="lang-ar">الشكل ٢٦: قائمة "جميع الصفحات".</span></p>
+                        </li>
+                        <li>
+                            <h3 id="page-basic-settings"><span class="lang-en">Basic Settings</span><span class="lang-ar">الإعدادات الأساسية</span></h3>
+                            <p><span class="lang-en">You can change your website's basic settings by going to "General settings > Basic Identity".</span><span class="lang-ar">يمكنك تغيير الإعدادات الأساسية لموقعك عن طريق الانتقال إلى "الإعدادات العامة > الهوية الأساسية".</span></p>
+                            <h4><span class="lang-en">Site Title Settings:</span><span class="lang-ar">إعدادات عنوان الموقع:</span></h4>
+                            <p><span class="lang-en">You can change your website logo, site title, and other basic identity settings here.</span><span class="lang-ar">يمكنك تغيير شعار موقعك وعنوان الموقع وإعدادات الهوية الأساسية الأخرى هنا.</span></p>
+                            <ul>
+                                <li><strong><span class="lang-en">Site Title:</span><span class="lang-ar">عنوان الموقع:</span></strong><span class="lang-en"> Enter your website title. This is very important for your website's SEO.</span><span class="lang-ar"> أدخل عنوان موقعك. هذا مهم جدًا لتحسين محركات البحث لموقعك.</span></li>
+                                <li><strong><span class="lang-en">Site Tag Line:</span><span class="lang-ar">شعار الموقع:</span></strong><span class="lang-en"> Enter your website's tag line.</span><span class="lang-ar"> أدخل شعار موقعك.</span></li>
+                                <li><strong><span class="lang-en">Footer Copyright:</span><span class="lang-ar">حقوق النشر في التذييل:</span></strong><span class="lang-en"> Enter the text for your footer copyright. Use `{copy}` which will be replaced by `&copy;`, and `{year}` which will be replaced by the current year.</span><span class="lang-ar"> أدخل النص الخاص بحقوق النشر في التذييل. استخدم `{copy}` الذي سيتم استبداله بـ `&copy;`، و `{year}` الذي سيتم استبداله بالعام الحالي.</span></li>
+                                <li><strong><span class="lang-en">Dark Mode For Admin Dashboard:</span><span class="lang-ar">الوضع الداكن للوحة تحكم المشرف:</span></strong><span class="lang-en"> You can enable/disable dark mode for the admin panel.</span><span class="lang-ar"> يمكنك تمكين/تعطيل الوضع الداكن للوحة التحكم.</span></li>
+                                <li><strong><span class="lang-en">Language Select Show/Hide:</span><span class="lang-ar">إظهار/إخفاء تحديد اللغة:</span></strong><span class="lang-en"> You can choose to show or hide the language dropdown on your website.</span><span class="lang-ar"> يمكنك اختيار إظهار أو إخفاء القائمة المنسدلة للغة على موقعك.</span></li>
+                                <li><strong><span class="lang-en">Enable/Disable Payment Gateway:</span><span class="lang-ar">تمكين/تعطيل بوابة الدفع:</span></strong><span class="lang-en"> You can enable or disable various website payment gateways.</span><span class="lang-ar"> يمكنك تمكين أو تعطيل بوابات الدفع المختلفة للموقع.</span></li>
+                                <li><strong><span class="lang-en">Disable User Email Verify:</span><span class="lang-ar">تعطيل التحقق من بريد المستخدم الإلكتروني:</span></strong><span class="lang-en"> You can enable or disable user email verification.</span><span class="lang-ar"> يمكنك تمكين أو تعطيل التحقق من البريد الإلكتروني للمستخدم.</span></li>
+                                <li><strong><span class="lang-en">Site Main Color Settings:</span><span class="lang-ar">إعدادات اللون الرئيسي للموقع:</span></strong><span class="lang-en"> You can change the website's main color.</span><span class="lang-ar"> يمكنك تغيير اللون الرئيسي للموقع.</span></li>
+                                <li><strong><span class="lang-en">Site Base Color Two Settings:</span><span class="lang-ar">إعدادات اللون الأساسي الثاني للموقع:</span></strong><span class="lang-en"> You can change the website's second base color.</span><span class="lang-ar"> يمكنك تغيير اللون الأساسي الثاني للموقع.</span></li>
+                                <li><strong><span class="lang-en">Site Secondary color:</span><span class="lang-ar">اللون الثانوي للموقع:</span></strong><span class="lang-en"> You can change the website's secondary color.</span><span class="lang-ar"> يمكنك تغيير اللون الثانوي للموقع.</span></li>
+                            </ul>
+                            <img src="site title.png" alt="Site Title Settings Interface" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 37: The Site Title and Basic Settings interface.</span><span class="lang-ar">الشكل ٣٧: واجهة إعدادات عنوان الموقع والإعدادات الأساسية.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="page-seo-settings"><span class="lang-en">SEO & OG Meta Settings</span><span class="lang-ar">إعدادات SEO و OG Meta</span></h3>
+                            <p><span class="lang-en">Content for Seo & og meta settings goes here...</span><span class="lang-ar">محتوى إعدادات SEO و OG Meta يذهب هنا ...</span></p>
+                        </li>
+                        <li>
+                            <h3 id="logo-site-title"><span class="lang-en">Logo & Site title</span><span class="lang-ar">الشعار وعنوان الموقع</span></h3>
+                            <p><span class="lang-en">You can change your website logo and other site identity elements by going to "General settings > Site Identity".</span><span class="lang-ar">يمكنك تغيير شعار موقعك وعناصر هوية الموقع الأخرى عن طريق الانتقال إلى "الإعدادات العامة > هوية الموقع".</span></p>
+                            <ul>
+                                <li><strong><span class="lang-en">Site Logo:</span><span class="lang-ar">شعار الموقع:</span></strong><span class="lang-en"> Upload your main logo for the website.</span><span class="lang-ar"> قم بتحميل شعارك الرئيسي للموقع.</span></li>
+                                <li><strong><span class="lang-en">White Site Logo:</span><span class="lang-ar">شعار الموقع الأبيض:</span></strong><span class="lang-en"> Upload a white version of your logo for specific theme areas.</span><span class="lang-ar"> قم بتحميل نسخة بيضاء من شعارك لمناطق معينة في السمة.</span></li>
+                                <li><strong><span class="lang-en">Favicon:</span><span class="lang-ar">الأيقونة المفضلة:</span></strong><span class="lang-en"> Upload your website's favicon (the small icon in the browser tab).</span><span class="lang-ar"> قم بتحميل الأيقونة المفضلة لموقعك (الأيقونة الصغيرة في علامة تبويب المتصفح).</span></li>
+                                <li><strong><span class="lang-en">Breadcrumb Image:</span><span class="lang-ar">صورة مسار التنقل:</span></strong><span class="lang-en"> Upload an image for your website's breadcrumb area.</span><span class="lang-ar"> قم بتحميل صورة لمنطقة مسار التنقل في موقعك.</span></li>
+                            </ul>
+                            <img src="website logo change.png" alt="Website Logo Change Settings" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 36: The Website Logo and Site Identity settings.</span><span class="lang-ar">الشكل ٣٦: إعدادات شعار الموقع وهوية الموقع.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="custom-css"><span class="lang-en">Custom CSS</span><span class="lang-ar">CSS مخصص</span></h3>
+                            <p><span class="lang-en">This CMS comes with the option to add your own CSS to change or customize anything on the website. Go to "General settings > Custom CSS", add your own CSS code here, and then go to the website to see the changes as per your CSS code.</span><span class="lang-ar">يأتي نظام إدارة المحتوى هذا مع خيار إضافة CSS الخاص بك لتغيير أو تخصيص أي شيء على الموقع. انتقل إلى "الإعدادات العامة > CSS مخصص"، أضف كود CSS الخاص بك هنا، ثم انتقل إلى الموقع لرؤية التغييرات وفقًا لكود CSS الخاص بك.</span></p>
+                            <div class="note"><p><strong><span class="lang-en">Note:</span><span class="lang-ar">ملاحظة:</span></strong><span class="lang-en"> Sometimes, if you don't see the changes, clear your browser cache by pressing `Ctrl+Shift+R` (Windows) or `Cmd+Shift+R` (macOS).</span><span class="lang-ar"> في بعض الأحيان، إذا لم تر التغييرات، فامسح ذاكرة التخزين المؤقت للمتصفح بالضغط على `Ctrl+Shift+R` (Windows) أو `Cmd+Shift+R` (macOS).</span></p></div>
+                        </li>
+                        <li>
+                            <h3 id="custom-js"><span class="lang-en">Custom JS</span><span class="lang-ar">JS مخصص</span></h3>
+                            <p><span class="lang-en">This CMS comes with the option to add your own JavaScript to change or customize anything on the website. Go to "General settings > Custom Js", add your own JS code here, and then go to the website to see the changes as per your JS code.</span><span class="lang-ar">يأتي نظام إدارة المحتوى هذا مع خيار إضافة جافا سكريبت الخاص بك لتغيير أو تخصيص أي شيء على الموقع. انتقل إلى "الإعدادات العامة > Js مخصص"، أضف كود JS الخاص بك هنا، ثم انتقل إلى الموقع لرؤية التغييرات وفقًا لكود JS الخاص بك.</span></p>
+                            <div class="note"><p><strong><span class="lang-en">Note:</span><span class="lang-ar">ملاحظة:</span></strong><span class="lang-en"> Sometimes, if you don't see the changes, clear your browser cache by pressing `Ctrl+Shift+R` (Windows) or `Cmd+Shift+R` (macOS).</span><span class="lang-ar"> في بعض الأحيان، إذا لم تر التغييرات، فامسح ذاكرة التخزين المؤقت للمتصفح بالضغط على `Ctrl+Shift+R` (Windows) أو `Cmd+Shift+R` (macOS).</span></p></div>
+                        </li>
+                        <li>
+                            <h3 id="cache-settings"><span class="lang-en">Cache settings</span><span class="lang-ar">إعدادات ذاكرة التخزين المؤقت</span></h3>
+                            <p><span class="lang-en">Sometimes you need to clear your system cache. This CMS comes with an option to do it from the admin panel. Go to "General Settings > Cache Settings" and then press "Clear All".</span><span class="lang-ar">في بعض الأحيان تحتاج إلى مسح ذاكرة التخزين المؤقت لنظامك. يأتي نظام إدارة المحتوى هذا مع خيار للقيام بذلك من لوحة التحكم. انتقل إلى "الإعدادات العامة > إعدادات ذاكرة التخزين المؤقت" ثم اضغط على "مسح الكل".</span></p>
+                        </li>
+                        <li>
+                            <h3 id="live-chat"><span class="lang-en">Live Chat</span><span class="lang-ar">الدردشة الحية</span></h3>
+                            <p><span class="lang-en">This CMS has the option to add live chat via <a href="https://www.tawk.to/" target="_blank">Tawk.to</a>. If you want to use it, you have to configure it for your CMS. Follow the steps below to add your own Tawk.to account and integrate it into the CMS.</span><span class="lang-ar">يحتوي نظام إدارة المحتوى هذا على خيار لإضافة الدردشة الحية عبر <a href="https://www.tawk.to/" target="_blank">Tawk.to</a>. إذا كنت ترغب في استخدامه، فيجب عليك تكوينه لنظام إدارة المحتوى الخاص بك. اتبع الخطوات أدناه لإضافة حساب Tawk.to الخاص بك ودمجه في نظام إدارة المحتوى.</span></p>
+                            <h4><span class="lang-en">Step 01: Sign up for Tawk.to</span><span class="lang-ar">الخطوة ٠١: التسجيل في Tawk.to</span></h4>
+                            <p><span class="lang-en">Go to <a href="https://www.tawk.to/" target="_blank">tawk.to</a> and click the "Sign up free" button to open a new account.</span><span class="lang-ar">انتقل إلى <a href="https://www.tawk.to/" target="_blank">tawk.to</a> وانقر على زر "تسجيل مجاني" لفتح حساب جديد.</span></p>
+                            <img src="twak.to sign up free.png" alt="Tawk.to Sign Up Free" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 38: The Tawk.to sign-up page.</span><span class="lang-ar">الشكل ٣٨: صفحة التسجيل في Tawk.to.</span></p>
+                            <h4><span class="lang-en">Step 02: Create a free account</span><span class="lang-ar">الخطوة ٠٢: إنشاء حساب مجاني</span></h4>
+                            <p><span class="lang-en">Complete the process to create a completely free account.</span><span class="lang-ar">أكمل العملية لإنشاء حساب مجاني بالكامل.</span></p>
+                            <img src="create a free account.png" alt="Create a Free Tawk.to Account" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 39: Creating a free Tawk.to account.</span><span class="lang-ar">الشكل ٣٩: إنشاء حساب مجاني في Tawk.to.</span></p>
+                            <h4><span class="lang-en">Step 03: Select your language</span><span class="lang-ar">الخطوة ٠٣: حدد لغتك</span></h4>
+                            <p><span class="lang-en">Select your preferred language and click "Next".</span><span class="lang-ar">حدد لغتك المفضلة وانقر على "التالي".</span></p>
+                            <img src="language selection.png" alt="Tawk.to Language Selection" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 40: Tawk.to language selection.</span><span class="lang-ar">الشكل ٤٠: تحديد اللغة في Tawk.to.</span></p>
+                            <h4><span class="lang-en">Step 04: Enter property details</span><span class="lang-ar">الخطوة ٠٤: أدخل تفاصيل الموقع</span></h4>
+                            <p><span class="lang-en">Enter your property details. It will ask you about your website title, your website URL, and the widget name.</span><span class="lang-ar">أدخل تفاصيل موقعك. سيطلب منك عنوان موقعك، ورابط موقعك، واسم الويدجت.</span></p>
+                            <img src="set live chat widget details.png" alt="Set Live Chat Widget Details" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 41: Setting up live chat widget details.</span><span class="lang-ar">الشكل ٤١: إعداد تفاصيل ويدجت الدردشة الحية.</span></p>
+                            <h4><span class="lang-en">Step 05: Add Team Members</span><span class="lang-ar">الخطوة ٠٥: إضافة أعضاء الفريق</span></h4>
+                            <p><span class="lang-en">Invite your coworkers and set their access level. An <strong>Admin</strong> can configure and customize settings, while an <strong>Agent</strong> can only answer chats and tickets.</span><span class="lang-ar">ادعُ زملائك في العمل وحدد مستوى وصولهم. يمكن لـ <strong>المشرف</strong> تكوين وتخصيص الإعدادات، بينما يمكن لـ <strong>الوكيل</strong> فقط الرد على الدردشات والتذاكر.</span></p>
+                            <img src="add team members.png" alt="Add Team Members in Tawk.to" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 42: Adding team members in Tawk.to.</span><span class="lang-ar">الشكل ٤٢: إضافة أعضاء الفريق في Tawk.to.</span></p>
+                            <h4><span class="lang-en">Step 06: Install Widget</span><span class="lang-ar">الخطوة ٠٦: تثبيت الويدجت</span></h4>
+                            <p><span class="lang-en">Proceed to install the widget or get the widget code.</span><span class="lang-ar">تابع لتثبيت الويدجت أو الحصول على كود الويدجت.</span></p>
+                            <img src="install widget or widget code.png" alt="Install Tawk.to Widget" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 43: Installing the Tawk.to widget.</span><span class="lang-ar">الشكل ٤٣: تثبيت ويدجت Tawk.to.</span></p>
+                            <h4><span class="lang-en">Step 07: Copy Embed Code to CMS</span><span class="lang-ar">الخطوة ٠٧: نسخ كود التضمين إلى نظام إدارة المحتوى</span></h4>
+                            <p><span class="lang-en">Copy the marked embed code and paste it into your website admin panel under "General Settings > Third Party Scripts" in the "Tawk.to API Widget Code" field.</span><span class="lang-ar">انسخ كود التضمين المحدد والصقه في لوحة تحكم موقعك تحت "الإعدادات العامة > سكربتات الطرف الثالث" في حقل "كود واجهة برمجة تطبيقات ويدجت Tawk.to".</span></p>
+                            <img src="General Settings _ third party scripts” Tawk.to API Widget Code.png" alt="Tawk.to API Widget Code Integration" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 44: Pasting the Tawk.to embed code into the CMS.</span><span class="lang-ar">الشكل ٤٤: لصق كود تضمين Tawk.to في نظام إدارة المحتوى.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="typography"><span class="lang-en">Typography</span><span class="lang-ar">الطباعة</span></h3>
+                            <p><span class="lang-en">This CMS comes with the option to use Google Fonts, with over 500+ fonts included. To use your chosen fonts for the CMS, you have to go to "General settings > Typography settings".</span><span class="lang-ar">يأتي نظام إدارة المحتوى هذا مع خيار استخدام خطوط جوجل، مع تضمين أكثر من 500 خط. لاستخدام الخطوط التي اخترتها لنظام إدارة المحتوى، يجب عليك الانتقال إلى "الإعدادات العامة > إعدادات الطباعة".</span></p>
+                            <h4><span class="lang-en">Setup body fonts:</span><span class="lang-ar">إعداد خطوط النص الأساسي:</span></h4>
+                            <p><span class="lang-en">Body font means the font that will be used for all paragraphs and inline elements on the website. Whenever you select a font family, you must also set the font variant for that font family; otherwise, the font change will not work.</span><span class="lang-ar">خط النص الأساسي يعني الخط الذي سيتم استخدامه لجميع الفقرات والعناصر المضمنة في الموقع. كلما اخترت عائلة خطوط، يجب عليك أيضًا تعيين متغير الخط لتلك العائلة؛ وإلا، فلن يعمل تغيير الخط.</span></p>
+                            <img src="set font for body.png" alt="Set Font for Body" class="content-image">
+                            <p class="image-caption"><span class="lang-en">Figure 45: Setting up body fonts.</span><span class="lang-ar">الشكل ٤٥: إعداد خطوط النص الأساسي.</span></p>
+                            <h4><span class="lang-en">Setup Heading fonts:</span><span class="lang-ar">إعداد خطوط العناوين:</span></h4>
+                            <p><span class="lang-en">You can use a separate font family for heading tags (e.g., h1-h6), or you can keep the same font for both body and headings by disabling heading fonts.</span><span class="lang-ar">يمكنك استخدام عائلة خطوط منفصلة لوسوم العناوين (مثل h1-h6)، أو يمكنك الحفاظ على نفس الخط لكل من النص الأساسي والعناوين عن طريق تعطيل خطوط العناوين.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="plugins-integrations">
+                    <h2><span class="lang-en">Plugins & Integrations</span><span class="lang-ar">الإضافات والتكاملات</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="woocommerce-integration"><span class="lang-en">WooCommerce</span><span class="lang-ar">ووكومرس</span></h3>
+                            <p><span class="lang-en">This eCommerce platform has an advanced WooCommerce feature, allowing the admin to import products directly from WooCommerce to Nazmart.</span><span class="lang-ar">تحتوي هذه المنصة للتجارة الإلكترونية على ميزة WooCommerce متقدمة، مما يسمح للمشرف باستيراد المنتجات مباشرة من WooCommerce إلى Nazmart.</span></p>
+                            <ul>
+                                <li>
+                                    <h4 id="woocommerce-settings"><span class="lang-en">Settings</span><span class="lang-ar">الإعدادات</span></h4>
+                                    <p><span class="lang-en">To use this feature, go to "WooCommerce > Settings" in the admin panel and add the REST API WooCommerce Credentials from your WordPress site.</span><span class="lang-ar">لاستخدام هذه الميزة، انتقل إلى "WooCommerce > الإعدادات" في لوحة التحكم وأضف بيانات اعتماد واجهة برمجة تطبيقات REST الخاصة بـ WooCommerce من موقع ووردبريس الخاص بك.</span></p>
+                                </li>
+                                <li>
+                                    <h4 id="import-settings"><span class="lang-en">Import Settings</span><span class="lang-ar">إعدادات الاستيراد</span></h4>
+                                    <p><span class="lang-en">The WooCommerce product system and the Nazmart product system are not totally the same, which is why we need to set some default options for importing the products. To achieve this, go to "WooCommerce > Import Settings" and set the default product unit and default product unit of measurement (UOM).</span><span class="lang-ar">نظام منتجات WooCommerce ونظام منتجات Nazmart ليسا متطابقين تمامًا، ولهذا السبب نحتاج إلى تعيين بعض الخيارات الافتراضية لاستيراد المنتجات. لتحقيق ذلك، انتقل إلى "WooCommerce > إعدادات الاستيراد" وقم بتعيين وحدة المنتج الافتراضية ووحدة القياس الافتراضية للمنتج (UOM).</span></p>
+                                </li>
+                                <li>
+                                    <h4 id="import-product"><span class="lang-en">Import Product</span><span class="lang-ar">استيراد المنتج</span></h4>
+                                    <p><span class="lang-en">You can import simple products from your WooCommerce WordPress site to Nazmart (Variable products are not supported yet). To achieve this, go to "WooCommerce > Product List".</span><span class="lang-ar">يمكنك استيراد المنتجات البسيطة من موقع ووردبريس WooCommerce الخاص بك إلى Nazmart (المنتجات المتغيرة غير مدعومة بعد). لتحقيق ذلك، انتقل إلى "WooCommerce > قائمة المنتجات".</span></p>
+                                    <p><span class="lang-en">You can select each product by ticking the mark on the left side and then clicking the bulk option. Select "Import" and then press "Apply". Your selected products will be imported. If you have not imported any product before, you can import them all at once by clicking the "Import All" button on the top right.</span><span class="lang-ar">يمكنك تحديد كل منتج عن طريق وضع علامة على الجانب الأيسر ثم النقر فوق خيار الإجراءات الجماعية. حدد "استيراد" ثم اضغط على "تطبيق". سيتم استيراد منتجاتك المحددة. إذا لم تكن قد استوردت أي منتج من قبل، يمكنك استيرادها جميعًا مرة واحدة عن طريق النقر فوق زر "استيراد الكل" في أعلى اليمين.</span></p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3 id="site-analytics"><span class="lang-en">Site Analytics</span><span class="lang-ar">تحليلات الموقع</span></h3>
+                            <ul>
+                                <li>
+                                    <h4 id="site-analytics-dashboard"><span class="lang-en">Dashboard</span><span class="lang-ar">لوحة التحكم</span></h4>
+                                    <p><span class="lang-en">If you are using the site analytics plugin, you should have access to this page. You will find this page in the admin panel by navigating to "Site Analytics > Dashboard".</span><span class="lang-ar">إذا كنت تستخدم إضافة تحليلات الموقع، فيجب أن يكون لديك حق الوصول إلى هذه الصفحة. ستجد هذه الصفحة في لوحة التحكم عن طريق الانتقال إلى "تحليلات الموقع > لوحة التحكم".</span></p>
+                                </li>
+                                <li>
+                                    <h4 id="subscription-plan-details"><span class="lang-en">Subscription plan details</span><span class="lang-ar">تفاصيل خطة الاشتراك</span></h4>
+                                    <p><span class="lang-en">If you are using the site analytics plugin, then you should have access to this page. You will find this page in the admin panel by navigating to "Site Analytics > Analytics".</span><span class="lang-ar">إذا كنت تستخدم إضافة تحليلات الموقع، فيجب أن يكون لديك حق الوصول إلى هذه الصفحة. ستجد هذه الصفحة في لوحة التحكم عن طريق الانتقال إلى "تحليلات الموقع > التحليلات".</span></p>
+                                </li>
+                                <li>
+                                    <h4 id="site-analytics-settings"><span class="lang-en">Settings</span><span class="lang-ar">الإعدادات</span></h4>
+                                    <p><span class="lang-en">If you are using the site analytics plugin, then you should have access to this page. You will find this page in the admin panel by navigating to "Site Analytics > Settings".</span><span class="lang-ar">إذا كنت تستخدم إضافة تحليلات الموقع، فيجب أن يكون لديك حق الوصول إلى هذه الصفحة. ستجد هذه الصفحة في لوحة التحكم عن طريق الانتقال إلى "تحليلات الموقع > الإعدادات".</span></p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3 id="cloud-storage-plugin"><span class="lang-en">Cloud Storage Plugin</span><span class="lang-ar">إضافة التخزين السحابي</span></h3>
+                            <ul>
+                                <li>
+                                    <h4 id="cloudflare-r2"><span class="lang-en">CloudFlare R2 configure</span><span class="lang-ar">تكوين CloudFlare R2</span></h4>
+                                    <p><span class="lang-en">To use CloudFlare R2 Storage, register to <a href="https://www.cloudflare.com" target="_blank">Cloudflare</a> and follow their documentation to get API details.</span><span class="lang-ar">لاستخدام تخزين CloudFlare R2، قم بالتسجيل في <a href="https://www.cloudflare.com" target="_blank">Cloudflare</a> واتبع وثائقهم للحصول على تفاصيل واجهة برمجة التطبيقات.</span></p>
+                                    <p><span class="lang-en">Once you have your API details:</span><span class="lang-ar">بمجرد حصولك على تفاصيل واجهة برمجة التطبيقات:</span></p>
+                                    <ol>
+                                        <li><span class="lang-en">Go to the admin panel > "Cloud Storage".</span><span class="lang-ar">انتقل إلى لوحة التحكم > "التخزين السحابي".</span></li>
+                                        <li><span class="lang-en">Select Cloudflare as your default storage driver.</span><span class="lang-ar">حدد Cloudflare كمشغل تخزين افتراضي.</span></li>
+                                        <li><span class="lang-en">Add your API key details here.</span><span class="lang-ar">أضف تفاصيل مفتاح API الخاص بك هنا.</span></li>
+                                        <li><span class="lang-en">After saving the API key, click on "Sync local file to cloud" to sync your existing local files to Cloud Storage.</span><span class="lang-ar">بعد حفظ مفتاح API، انقر على "مزامنة الملفات المحلية إلى السحابة" لمزامنة ملفاتك المحلية الحالية إلى التخزين السحابي.</span></li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <h4 id="wasabi-cloud"><span class="lang-en">Wasabi Cloud configure</span><span class="lang-ar">تكوين Wasabi Cloud</span></h4>
+                                    <p><span class="lang-en">To use Wasabi Cloud Storage, register to <a href="https://wasabi.com" target="_blank">Wasabi</a> and follow their documentation to get API details.</span><span class="lang-ar">لاستخدام تخزين Wasabi Cloud، قم بالتسجيل في <a href="https://wasabi.com" target="_blank">Wasabi</a> واتبع وثائقهم للحصول على تفاصيل واجهة برمجة التطبيقات.</span></p>
+                                    <p><span class="lang-en">Once you have your API details:</span><span class="lang-ar">بمجرد حصولك على تفاصيل واجهة برمجة التطبيقات:</span></p>
+                                    <ol>
+                                        <li><span class="lang-en">Go to the admin panel > "Cloud Storage".</span><span class="lang-ar">انتقل إلى لوحة التحكم > "التخزين السحابي".</span></li>
+                                        <li><span class="lang-en">Select Wasabi as your default storage driver.</span><span class="lang-ar">حدد Wasabi كمشغل تخزين افتراضي.</span></li>
+                                        <li><span class="lang-en">Add your API key details here.</span><span class="lang-ar">أضف تفاصيل مفتاح API الخاص بك هنا.</span></li>
+                                        <li><span class="lang-en">After saving the API key, click on "Sync local file to cloud" to sync your existing local files to Cloud Storage.</span><span class="lang-ar">بعد حفظ مفتاح API، انقر على "مزامنة الملفات المحلية إلى السحابة" لمزامنة ملفاتك المحلية الحالية إلى التخزين السحابي.</span></li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <h4 id="aws-s3"><span class="lang-en">AWS S3 Bucket configure</span><span class="lang-ar">تكوين حاوية AWS S3</span></h4>
+                                    <p><span class="lang-en">To use AWS S3 Storage, register to <a href="https://aws.amazon.com/s3/" target="_blank">AWS S3</a> and follow their documentation to get API details.</span><span class="lang-ar">لاستخدام تخزين AWS S3، قم بالتسجيل في <a href="https://aws.amazon.com/s3/" target="_blank">AWS S3</a> واتبع وثائقهم للحصول على تفاصيل واجهة برمجة التطبيقات.</span></p>
+                                    <p><span class="lang-en">Once you have your API details:</span><span class="lang-ar">بمجرد حصولك على تفاصيل واجهة برمجة التطبيقات:</span></p>
+                                    <ol>
+                                        <li><span class="lang-en">Go to the admin panel > "Cloud Storage".</span><span class="lang-ar">انتقل إلى لوحة التحكم > "التخزين السحابي".</span></li>
+                                        <li><span class="lang-en">Select AWS S3 as your default storage driver.</span><span class="lang-ar">حدد AWS S3 كمشغل تخزين افتراضي.</span></li>
+                                        <li><span class="lang-en">Add your API key details here.</span><span class="lang-ar">أضف تفاصيل مفتاح API الخاص بك هنا.</span></li>
+                                        <li><span class="lang-en">After saving the API key, click on "Sync local file to cloud" to sync your existing local files to Cloud Storage.</span><span class="lang-ar">بعد حفظ مفتاح API، انقر على "مزامنة الملفات المحلية إلى السحابة" لمزامنة ملفاتك المحلية الحالية إلى التخزين السحابي.</span></li>
+                                    </ol>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section id="theme-management">
+                    <h2><span class="lang-en">Theme Management</span><span class="lang-ar">إدارة السمات</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="change-theme-demo-data"><span class="lang-en">How to Change theme with demo data?</span><span class="lang-ar">كيفية تغيير السمة مع البيانات التجريبية؟</span></h3>
+                            <p><span class="lang-en">To change your theme and manage demo data, login to your shop and navigate to "Appearance settings > Theme Manage".</span><span class="lang-ar">لتغيير سمتك وإدارة البيانات التجريبية، قم بتسجيل الدخول إلى متجرك وانتقل إلى "إعدادات المظهر > إدارة السمات".</span></p>
+                            <p><span class="lang-en">Now, click on any of the theme images.</span><span class="lang-ar">الآن، انقر على أي من صور السمات.</span></p>
+                            <p><span class="lang-en">You will then find options to change the theme with or without demo data.</span><span class="lang-ar">ستجد بعد ذلك خيارات لتغيير السمة مع أو بدون بيانات تجريبية.</span></p>
+                            <p><span class="lang-en">If you select "with demo data", it will import demo data along with the theme change, and your website will display with the new theme demos.</span><span class="lang-ar">إذا حددت "مع البيانات التجريبية"، فسيتم استيراد البيانات التجريبية مع تغيير السمة، وسيتم عرض موقعك مع العروض التجريبية للسمة الجديدة.</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="sms-gateway">
+                    <h2><span class="lang-en">SMS Gateway</span><span class="lang-ar">بوابة الرسائل القصيرة</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="Enable/Disable OTP"><span class="lang-en">Enable/Disable OTP</span><span class="lang-ar">تمكين/تعطيل OTP</span></h3>
+                            <p><span class="lang-en">To enable or disable OTP for the user login page, go to "SMS Gateway > SMS Settings" in the Twilio section and click on "Settings".</span><span class="lang-ar">لتمكين أو تعطيل OTP لصفحة تسجيل دخول المستخدم، انتقل إلى "بوابة الرسائل القصيرة > إعدادات الرسائل القصيرة" في قسم Twilio وانقر على "الإعدادات".</span></p>
+                        </li>
+                        <li>
+                            <h3 id="Twillo Settings"><span class="lang-en">Twilio Settings</span><span class="lang-ar">إعدادات Twilio</span></h3>
+                            <p><span class="lang-en">To configure Twilio SMS settings, go to "SMS Gateway > SMS Settings" in the Twilio section and click on "Settings".</span><span class="lang-ar">لتكوين إعدادات رسائل Twilio القصيرة، انتقل إلى "بوابة الرسائل القصيرة > إعدادات الرسائل القصيرة" في قسم Twilio وانقر على "الإعدادات".</span></p>
+                            <p><span class="lang-en">You will need to go to <a href="https://www.twilio.com" target="_blank">Twilio</a> to get your API credentials.</span><span class="lang-ar">ستحتاج إلى الانتقال إلى <a href="https://www.twilio.com" target="_blank">Twilio</a> للحصول على بيانات اعتماد واجهة برمجة التطبيقات الخاصة بك.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="SMS Settings"><span class="lang-en">SMS Settings</span><span class="lang-ar">إعدادات الرسائل القصيرة</span></h3>
+                            <p><span class="lang-en">To configure general SMS settings, go to "SMS Gateway > SMS Settings". Click on "SMS Settings" to configure them as per your need.</span><span class="lang-ar">لتكوين إعدادات الرسائل القصيرة العامة، انتقل إلى "بوابة الرسائل القصيرة > إعدادات الرسائل القصيرة". انقر على "إعدادات الرسائل القصيرة" لتكوينها حسب حاجتك.</span></p>
+                        </li>
+                        <li>
+                            <h3 id="MSG91 Settings"><span class="lang-en">MSG91 Settings</span><span class="lang-ar">إعدادات MSG91</span></h3>
+                            <p><span class="lang-en">To configure MSG91 settings, go to "SMS Gateway > SMS Settings" in the MSG91 section and click on "Settings".</span><span class="lang-ar">لتكوين إعدادات MSG91، انتقل إلى "بوابة الرسائل القصيرة > إعدادات الرسائل القصيرة" في قسم MSG91 وانقر على "الإعدادات".</span></p>
+                            <p><span class="lang-en">Go to <a href="https://msg91.com/" target="_blank">MSG91</a> to get your Auth Key and Template IDs. Then, put all the credentials accordingly.</span><span class="lang-ar">انتقل إلى <a href="https://msg91.com/" target="_blank">MSG91</a> للحصول على مفتاح المصادقة ومعرفات القوالب الخاصة بك. ثم، ضع جميع بيانات الاعتماد وفقًا لذلك.</span></p>
+                            <p><span class="lang-en">To use this inside the Indian region, you need government approval for your DLT. In the DLT, you have to provide one or multiple template patterns. The same DLT pattern will be used in the MSG91 template.</span><span class="lang-ar">لاستخدام هذا داخل المنطقة الهندية، تحتاج إلى موافقة حكومية على DLT الخاص بك. في DLT، يجب عليك توفير نمط قالب واحد أو أكثر. سيتم استخدام نفس نمط DLT في قالب MSG91.</span></p>
+                            <p><span class="lang-en">Follow this link to register DLT: <a href="https://msg91.com/help/MSG91/dlt-registration-in-india" target="_blank">DLT Registration in India</a></span><span class="lang-ar">اتبع هذا الرابط لتسجيل DLT: <a href="https://msg91.com/help/MSG91/dlt-registration-in-india" target="_blank">تسجيل DLT في الهند</a></span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="pos-modules">
+                    <h2><span class="lang-en">POS Modules</span><span class="lang-ar">وحدات نقاط البيع (POS)</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="product-pos"><span class="lang-en">Product POS (Paid Plugin)</span><span class="lang-ar">نقاط بيع المنتج (إضافة مدفوعة)</span></h3>
+                            <p><span class="lang-en">go to pos -> pos manage page, here you will see the pos</span><span class="lang-ar">اذهب إلى نقاط البيع -> صفحة إدارة نقاط البيع، هنا سترى نقاط البيع</span></p>
+                        </li>
+                        <li>
+                            <h3 id="Tax Settings"><span class="lang-en">Tax Setting (Paid Plugin)</span><span class="lang-ar">إعداد الضرائب (إضافة مدفوعة)</span></h3>
+                            <p><span class="lang-en">Goto Pos -> settings you will find option to set tax option for the POS</span><span class="lang-ar">اذهب إلى نقاط البيع -> الإعدادات ستجد خيارًا لتعيين خيار الضريبة لنقاط البيع</span></p>
+                        </li>
+                    </ul>
+                </section>
+                <section id="Shipping Plugin">
+                    <h2><span class="lang-en">Shipping Plugin</span><span class="lang-ar">إضافة الشحن</span></h2>
+                    <ul>
+                        <li>
+                            <h3 id="dhl"><span class="lang-en">DHL</span><span class="lang-ar">دي إتش إل</span></h3>
+                            <p><span class="lang-en">Using DHL, you can track your parcels. To configure it, go to "Shipping Plugin > Shipping Settings", and click on the "Settings" button inside the "DHL Card".</span><span class="lang-ar">باستخدام DHL، يمكنك تتبع طرودك. لتكوينه، انتقل إلى "إضافة الشحن > إعدادات الشحن"، وانقر على زر "الإعدادات" داخل "بطاقة DHL".</span></p>
+                            <p><span class="lang-en">A popup will appear after clicking the settings button. Write your DHL API Key and API Secret here and hit the "Update Changes" button.</span><span class="lang-ar">ستظهر نافذة منبثقة بعد النقر على زر الإعدادات. اكتب مفتاح API وسر API الخاص بـ DHL هنا واضغط على زر "تحديث التغييرات".</span></p>
+                            <h4><span class="lang-en">How to Get DHL Keys</span><span class="lang-ar">كيفية الحصول على مفاتيح DHL</span></h4>
+                            <p><span class="lang-en">To get the DHL API Key and DHL API Secret, follow the instructions below:</span><span class="lang-ar">للحصول على مفتاح API وسر API الخاص بـ DHL، اتبع الإرشادات أدناه:</span></p>
+                            <ol>
+                                <li><span class="lang-en">Go to <a href="https://developer.dhl.com/my-apps" target="_blank">DHL My Apps</a> to create a developer account.</span><span class="lang-ar">انتقل إلى <a href="https://developer.dhl.com/my-apps" target="_blank">تطبيقاتي في DHL</a> لإنشاء حساب مطور.</span></li>
+                                <li><span class="lang-en">Click the "+ Create App" button.</span><span class="lang-ar">انقر على زر "+ إنشاء تطبيق".</span></li>
+                                <li><span class="lang-en">Fill up the form and select "Shipment Tracking – Unified", then hit "Create app".</span><span class="lang-ar">املأ النموذج وحدد "تتبع الشحنات - موحد"، ثم اضغط على "إنشاء تطبيق".</span></li>
+                                <li><span class="lang-en">On the dashboard, you will find the app with the name you have just created. Click on it, and you will find the credentials.</span><span class="lang-ar">في لوحة التحكم، ستجد التطبيق بالاسم الذي أنشأته للتو. انقر عليه، وستجد بيانات الاعتماد.</span></li>
+                            </ol>
+                            <p><span class="lang-en">For more details, follow the link: <a href="https://developer.dhl.com/api-reference/shipment-tracking#get-started-section" target="_blank">DHL Shipment Tracking API Reference</a></span><span class="lang-ar">لمزيد من التفاصيل، اتبع الرابط: <a href="https://developer.dhl.com/api-reference/shipment-tracking#get-started-section" target="_blank">مرجع واجهة برمجة تطبيقات تتبع الشحنات من DHL</a></span></p>
+                        </li>
+                        <li>
+                            <h3 id="order-list"><span class="lang-en">Order List</span><span class="lang-ar">قائمة الطلبات</span></h3>
+                            <p><span class="lang-en">You can check your auto-created order list and their status from the admin panel (Only valid for ShipRocket). Go to "Admin Panel > Shipping Plugin > Shipping Dashboard".</span><span class="lang-ar">يمكنك التحقق من قائمة الطلبات التي تم إنشاؤها تلقائيًا وحالتها من لوحة التحكم (صالحة فقط لـ ShipRocket). انتقل إلى "لوحة التحكم > إضافة الشحن > لوحة تحكم الشحن".</span></p>
+                            <div class="note"><span class="lang-en">This feature will be visible when any Shipping Plugin is activated.</span><span class="lang-ar">ستكون هذه الميزة مرئية عند تنشيط أي إضافة شحن.</span></div>
+                        </li>
+                        <li>
+                            <h3 id="shiprocket"><span class="lang-en">ShipRocket</span><span class="lang-ar">شيب روكيت</span></h3>
+                            <p><span class="lang-en">Using ShipRocket, you can create orders directly in your ShipRocket account and also track your parcels. To configure it, go to "Shipping Plugin > Shipping Settings" and click on the "Settings" button inside the "ShipRocket Card".</span><span class="lang-ar">باستخدام ShipRocket، يمكنك إنشاء طلبات مباشرة في حساب ShipRocket الخاص بك وكذلك تتبع طرودك. لتكوينه، انتقل إلى "إضافة الشحن > إعدادات الشحن" وانقر على زر "الإعدادات" داخل "بطاقة ShipRocket".</span></p>
+                            <p><span class="lang-en">A popup will appear after clicking the settings button. Write your ShipRocket API Email and API Password here and hit the "Update Changes" button.</span><span class="lang-ar">ستظهر نافذة منبثقة بعد النقر على زر الإعدادات. اكتب بريد إلكتروني وكلمة مرور واجهة برمجة تطبيقات ShipRocket هنا واضغط على زر "تحديث التغييرات".</span></p>
+                            <p><span class="lang-en">If the API Email and Password are correct, the Authorize Token will be generated automatically.</span><span class="lang-ar">إذا كان البريد الإلكتروني وكلمة المرور لواجهة برمجة التطبيقات صحيحين، فسيتم إنشاء رمز التفويض تلقائيًا.</span></p>
+                            <h4><span class="lang-en">How to Get ShipRocket API Email and Password</span><span class="lang-ar">كيفية الحصول على بريد إلكتروني وكلمة مرور واجهة برمجة تطبيقات ShipRocket</span></h4>
+                            <p><span class="lang-en">To get the ShipRocket API Email and API Password, follow the instructions below:</span><span class="lang-ar">للحصول على بريد إلكتروني وكلمة مرور واجهة برمجة تطبيقات ShipRocket، اتبع الإرشادات أدناه:</span></p>
+                            <ol>
+                                <li><span class="lang-en">Login to your ShipRocket account.</span><span class="lang-ar">قم بتسجيل الدخول إلى حساب ShipRocket الخاص بك.</span></li>
+                                <li><span class="lang-en">Go to "Settings" from the sidebar.</span><span class="lang-ar">انتقل إلى "الإعدادات" من الشريط الجانبي.</span></li>
+                                <li><span class="lang-en">Scroll down and look for the "API Section". Inside the API section, click on "Configure".</span><span class="lang-ar">مرر لأسفل وابحث عن "قسم API". داخل قسم API، انقر على "تكوين".</span></li>
+                                <li><span class="lang-en">When the new window opens, you will find a "+ Create an API User" button. Click on it, fill up the form, and hit "Generate API Credentials". After completing the process as guided by ShipRocket, you have to use these credentials for the Shipping Plugin in Nazmart.</span><span class="lang-ar">عندما تفتح النافذة الجديدة، ستجد زر "+ إنشاء مستخدم API". انقر عليه، املأ النموذج، واضغط على "إنشاء بيانات اعتماد API". بعد إكمال العملية كما هو موضح بواسطة ShipRocket، يجب عليك استخدام بيانات الاعتماد هذه لإضافة الشحن في Nazmart.</span></li>
+                            </ol>
+                            <h4><span class="lang-en">More Configuration</span><span class="lang-ar">تكوين إضافي</span></h4>
+                            <p><span class="lang-en">To configure more options, go to "Shipping Plugin > Shipping Settings" and click on the "Config button" inside the "ShipRocket Card".</span><span class="lang-ar">لتكوين المزيد من الخيارات، انتقل إلى "إضافة الشحن > إعدادات الشحن" وانقر على "زر التكوين" داخل "بطاقة ShipRocket".</span></p>
+                            <ul>
+                                <li><strong><span class="lang-en">Pickup Location:</span><span class="lang-ar">موقع الاستلام:</span></strong><span class="lang-en"> You have to create your pickup location in your ShipRocket account first, then you can select it from here.</span><span class="lang-ar"> يجب عليك إنشاء موقع الاستلام الخاص بك في حساب ShipRocket أولاً، ثم يمكنك تحديده من هنا.</span></li>
+                                <li><strong><span class="lang-en">Auto create Product:</span><span class="lang-ar">إنشاء منتج تلقائيًا:</span></strong><span class="lang-en"> If you keep it enabled, then when any customer places an order, and if the order is successful, ShipRocket will automatically create the same order as well.</span><span class="lang-ar"> إذا أبقيته ممكّنًا، فعندما يقوم أي عميل بتقديم طلب، وإذا كان الطلب ناجحًا، فسيقوم ShipRocket تلقائيًا بإنشاء نفس الطلب أيضًا.</span></li>
+                                <li><strong><span class="lang-en">Disable Order Tracking:</span><span class="lang-ar">تعطيل تتبع الطلب:</span></strong><span class="lang-en"> If you disable it, no one can track their orders.</span><span class="lang-ar"> إذا قمت بتعطيله، فلن يتمكن أي شخص من تتبع طلباته.</span></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3 id="tracking"><span class="lang-en">Tracking</span><span class="lang-ar">التتبع</span></h3>
+                            <p><span class="lang-en">You can create a tracker for your DHL or ShipRocket Shipping Plugin. Follow these steps:</span><span class="lang-ar">يمكنك إنشاء أداة تتبع لإضافة الشحن الخاصة بـ DHL أو ShipRocket. اتبع هذه الخطوات:</span></p>
+                            <ol>
+                                <li><span class="lang-en">Go to "Admin Panel > Pages > Add New Pages".</span><span class="lang-ar">انتقل إلى "لوحة التحكم > الصفحات > إضافة صفحات جديدة".</span></li>
+                                <li><span class="lang-en">Create a new page with "Breadcrumb" and "Page Builder" enabled.</span><span class="lang-ar">أنشئ صفحة جديدة مع تمكين "مسار التنقل" و "منشئ الصفحات".</span></li>
+                                <li><span class="lang-en">After saving, go to "All Pages" and find the page you have just created. Click on "Edit With Page Builder".</span><span class="lang-ar">بعد الحفظ، انتقل إلى "جميع الصفحات" وابحث عن الصفحة التي أنشأتها للتو. انقر على "تحرير باستخدام منشئ الصفحات".</span></li>
+                                <li><span class="lang-en">Here, you will find an addon named "Shipping Tracker" on the right side of the window. Drag it to the left-pointed area, fill up all necessary fields, and hit "Save Changes".</span><span class="lang-ar">هنا، ستجد إضافة تسمى "متتبع الشحن" على الجانب الأيمن من النافذة. اسحبها إلى المنطقة المشار إليها على اليسار، املأ جميع الحقول اللازمة، واضغط على "حفظ التغييرات".</span></li>
+                            </ol>
+                            <p><span class="lang-en">Read More: <a href="#add-menu-item">How to add the page to the frontend menu?</a></span><span class="lang-ar">اقرأ المزيد: <a href="#add-menu-item">كيفية إضافة الصفحة إلى قائمة الواجهة الأمامية؟</a></span></p>
+                            <h4><span class="lang-en">Track Order From Admin Panel</span><span class="lang-ar">تتبع الطلب من لوحة التحكم</span></h4>
+                            <p><span class="lang-en">To track orders from the admin panel, go to "Admin Panel > Shipping Plugin > Shipping Dashboard".</span><span class="lang-ar">لتتبع الطلبات من لوحة التحكم، انتقل إلى "لوحة التحكم > إضافة الشحن > لوحة تحكم الشحن".</span></p>
+                        </li>
+                    </ul>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>
+                <span class="lang-en">&copy; 2024 Keddily Docs. All rights reserved.</span>
+                <span class="lang-ar">&copy; 2024 وثائق Keddily. جميع الحقوق محفوظة.</span>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const themeToggle = document.querySelector('#checkbox');
+        const langEnBtn = document.getElementById('lang-en-btn');
+        const langArBtn = document.getElementById('lang-ar-btn');
+        const htmlEl = document.documentElement;
+        const bodyEl = document.body;
+        const searchInput = document.getElementById('search-input');
+        const searchResultsContainer = document.getElementById('search-results');
+        const tocContainer = document.getElementById('table-of-contents');
+        const sidebar = document.querySelector('.sidebar');
+        const menuToggleBtn = document.querySelector('.menu-toggle-btn');
+        const closeSidebarBtn = document.querySelector('.close-sidebar-btn');
+        const sidebarOverlay = document.querySelector('.sidebar-overlay');
+
+        const searchPlaceholders = {
+            en: 'Search documentation...',
+            ar: 'ابحث في الوثائق...'
+        };
+        let searchIndex = [];
+
+        function setTheme(theme) {
+            bodyEl.classList.toggle('dark-mode', theme === 'dark');
+            themeToggle.checked = (theme === 'dark');
+            localStorage.setItem('theme', theme);
+        }
+
+        function setLanguage(lang) {
+            htmlEl.setAttribute('lang', lang);
+            htmlEl.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            bodyEl.classList.toggle('lang-ar-active', lang === 'ar');
+            langEnBtn.classList.toggle('active', lang === 'en');
+            langArBtn.classList.toggle('active', lang === 'ar');
+            searchInput.placeholder = searchPlaceholders[lang];
+            localStorage.setItem('language', lang);
+            buildSearchIndex();
+            populateTOC();
+            searchResultsContainer.style.display = 'none';
+            searchInput.value = '';
+        }
+
+        function toggleSidebar() {
+            bodyEl.classList.toggle('sidebar-open');
+        }
+
+        function populateTOC() {
+            let existingUl = tocContainer.querySelector('ul');
+            if(existingUl) existingUl.remove();
+
+            const tocList = document.createElement('ul');
+            const mainContent = document.getElementById('main-content');
+            const sections = mainContent.querySelectorAll('section');
+            const currentLang = htmlEl.getAttribute('lang');
+
+            sections.forEach(section => {
+                const mainTitleEl = section.querySelector('h2 > span.lang-' + currentLang);
+                if (!mainTitleEl) return;
+                
+                const mainId = section.id;
+                const mainLi = document.createElement('li');
+                const mainLink = document.createElement('a');
+                mainLink.href = `#${mainId}`;
+                mainLink.textContent = mainTitleEl.textContent;
+                mainLi.appendChild(mainLink);
+                
+                const subSections = section.querySelectorAll('h3');
+                if (subSections.length > 0) {
+                    const subList = document.createElement('ul');
+                    subSections.forEach(subSection => {
+                        const subTitleEl = subSection.querySelector('span.lang-' + currentLang);
+                        if (!subTitleEl) return;
+
+                        const subId = subSection.id;
+                        const subLi = document.createElement('li');
+                        const subLink = document.createElement('a');
+                        subLink.href = `#${subId}`;
+                        subLink.textContent = subTitleEl.textContent;
+                        subLi.appendChild(subLink);
+                        subList.appendChild(subLi);
+                    });
+                    mainLi.appendChild(subList);
+                }
+                tocList.appendChild(mainLi);
+            });
+            tocContainer.appendChild(tocList);
+        }
+
+        function buildSearchIndex() {
+            searchIndex = [];
+            const currentLang = htmlEl.getAttribute('lang');
+            document.querySelectorAll('#main-content section').forEach(section => {
+                const titleEl = section.querySelector(`h2 > .lang-${currentLang}`);
+                if (titleEl) {
+                    const title = titleEl.textContent.trim();
+                    const content = Array.from(section.querySelectorAll(`p, li, h3, h4`))
+                        .map(el => (el.querySelector(`.lang-${currentLang}`)?.textContent || ''))
+                        .join(' ').replace(/\s+/g, ' ');
+
+                    searchIndex.push({
+                        id: section.id,
+                        title: title,
+                        content: content.toLowerCase()
+                    });
+                }
+            });
+        }
+        
+        function performSearch(query) {
+            if (!query) {
+                searchResultsContainer.style.display = 'none';
+                return;
+            }
+            const lowerCaseQuery = query.toLowerCase();
+            const results = searchIndex.filter(item => 
+                item.title.toLowerCase().includes(lowerCaseQuery) || 
+                item.content.includes(lowerCaseQuery)
+            );
+            displaySearchResults(results, lowerCaseQuery);
+        }
+
+        function displaySearchResults(results, query) {
+            searchResultsContainer.innerHTML = '';
+            if (results.length === 0) {
+                const noResult = document.createElement('div');
+                noResult.textContent = htmlEl.getAttribute('lang') === 'ar' ? 'لم يتم العثور على نتائج.' : 'No results found.';
+                noResult.style.padding = '12px 15px';
+                searchResultsContainer.appendChild(noResult);
+            } else {
+                results.forEach(result => {
+                    const link = document.createElement('a');
+                    link.href = `#${result.id}`;
+                    link.innerHTML = `<strong>${result.title}</strong><small>${highlight(result.content, query)}</small>`;
+                    searchResultsContainer.appendChild(link);
+                });
+            }
+            searchResultsContainer.style.display = 'block';
+        }
+
+        function highlight(text, query) {
+            const index = text.indexOf(query.toLowerCase());
+            const start = Math.max(0, index - 30);
+            const end = Math.min(text.length, index + query.length + 50);
+            let snippet = text.substring(start, end);
+            if (start > 0) snippet = '...' + snippet;
+            if (end < text.length) snippet = snippet + '...';
+            return snippet.replace(new RegExp(query, 'gi'), match => `<mark>${match}</mark>`);
+        }
+
+        // --- Event Listeners ---
+        themeToggle.addEventListener('change', (e) => setTheme(e.target.checked ? 'dark' : 'light'));
+        langEnBtn.addEventListener('click', () => setLanguage('en'));
+        langArBtn.addEventListener('click', () => setLanguage('ar'));
+        menuToggleBtn.addEventListener('click', toggleSidebar);
+        closeSidebarBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+        
+        tocContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' && window.innerWidth <= 992) {
+                toggleSidebar();
+            }
+        });
+        
+        searchInput.addEventListener('keyup', (e) => performSearch(e.target.value));
+        searchInput.addEventListener('focus', (e) => { if(e.target.value) performSearch(e.target.value); });
+        document.addEventListener('click', (e) => {
+            if (!searchResultsContainer.contains(e.target) && e.target !== searchInput) {
+                searchResultsContainer.style.display = 'none';
+            }
+        });
+
+        // --- Initial Load ---
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        }
+        setLanguage(localStorage.getItem('language') || 'en');
+        if (window.innerWidth >= 992) {
+            bodyEl.classList.add('sidebar-open');
+        } else {
+            bodyEl.classList.remove('sidebar-open');
+        }
+    });
+    </script>
+</body>
+</html>
